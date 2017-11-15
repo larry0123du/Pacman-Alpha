@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<canvas id="gc"></canvas>
+		<script>
+		const gs=20; // size of one grid
+        var px, py; // Starting position of Pacman
+        SCARED_TIMER = 60; // Set the scared time
+        // define directions
+        var dirs = {
+            SOUTH: {x:0, y:-1},
+            NORTH: {x:0, y:1},
+            EAST: {x:1, y:0},
+            WEST: {x:-1, y:0}
+        };
+
+		window.onload=function() {
+			canv=document.getElementById("gc");
+			canv.width = window.innerWidth;
+			canv.height = window.innerHeight;
+		
+			ctx=canv.getContext("2d");
+			document.addEventListener("keydown",keyPush);
+			setInterval(game,1000/15);
+		}
+
+        xv=yv=0; // Initial Velocity
+
+        function Character(id, pos, speed) {
+            this.id = id;
+            this.initPos = pos;
+            this.pos = pos;
+            this.initSpeed = speed;
+            this.speed = speed;
+
+            function getPos() {return this.pos;}
+
+            function move(dir) {
+                this.pos.x += dir.x;
+                this.pos.y += dir.y;
+            }
+
+            function doubleSpeed(){this.speed *= 2;}
+
+            function halfSpeed() {this.speed /= 2;}
+
+            function reset() {
+                this.pos = this.initPos;
+                this.speed = initSpeed;
+            }
+        }
+        
+        function Ghost(id, pos, speed, frightened, color) {
+            Character.call(this, id, pos, speed);
+            
+            this.frightened = frightened;
+            this.timer = 0;
+            this.initColor = color;
+            this.color = color;
+
+            function reset() {
+                Character.prototype.reset.call(this);
+                this.timer = 0;
+                this.frightened = false;
+                this.color = this.initColor;
+            }
+
+            function scare() {
+                this.frightened = true;
+                this.timer = SCARED_TIMER;
+                this.color = 'blue';
+            }
+
+            function isScared() {
+                return this.scared;
+            }
+
+            function decrementTimer() {
+                this.timer--;
+                if (this.timer == 0) {
+                    this.color = this.initColor;
+                    this.frightened = false;
+                }
+            }
+        }
+
+        function Pacman(id, pos, speed) {
+            Character.call(this, id, pos, speed);
+            this.lives = 3;
+
+            function decrementLives() {
+                this.lives--;
+            }
+
+            function alive() {
+                return this.lives > 0;
+            }
+        }
+
+        function init() {
+            ctx.fillStyle="black";
+            ctx.fillRect(0,0,canv.width,canv.height);
+            
+            for (var i = 0; i < )
+        }
+        
+		function game() {
+			
+		}
+		</script>
+	</body>
+	
+</html>
