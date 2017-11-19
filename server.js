@@ -6,7 +6,7 @@ var url = require('url');
 
 http.createServer(function(req, res) {
     pathName = url.parse(req.url).pathname;
-    if (pathName === '/') pathName += 'snake.html';
+    if (pathName === '/') pathName += 'pacman.html';
     fs.readFile(__dirname + pathName, function(err, data) {
         if (err) {            
             res.writeHead(404, {'Content-Type': 'text/plain'});
