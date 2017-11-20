@@ -21,15 +21,16 @@
         var gridWidth, gridHeight;
 
         var gameState;
-        var score = 0;
+        var agents;
 
         SCARED_TIMER = 60; // Set the scared time
         // define directions
         var dirs = {
-            SOUTH: {x:0, y:-1},
-            NORTH: {x:0, y:1},
-            EAST: {x:1, y:0},
-            WEST: {x:-1, y:0}
+            SOUTH: {x:1, y:0},
+            NORTH: {x:-1, y:0},
+            EAST: {x:0, y:1},
+            WEST: {x:0, y:-1},
+            NONE: {x:0, y:0}
         };
 
 		window.onload=function() {
@@ -43,58 +44,78 @@
 			setInterval(game,600);
 		}
 
-        xv=yv=0; // Initial Velocity
 
-        function Character(id, pos, speed) {
-            this.id = id;
-            this.initPos = pos;
-            this.pos = pos;
-            this.initSpeed = speed;
-            this.speed = speed;
-
-            function getPos() {return this.pos;}
-
-            function move(dir) {
-                this.pos.x += dir.x;
-                this.pos.y += dir.y;
+        class Character {
+            constructor(id, color, pos, speed) {
+                this.id = id;
+                this.color = color;
+                this.initPos = pos;
+                this.pos = pos;
+                this.initSpeed = speed;
+                this.speed = speed;
+                this.dir = dirs.NONE;
             }
 
-            function doubleSpeed(){this.speed *= 2;}
+            getPos() {return this.pos;}
 
-            function halfSpeed() {this.speed /= 2;}
+            move() {
+                let save_pos = {
+                    x: this.pos.x,
+                    y: this.pos.y
+                };
 
-            function reset() {
+                this.pos.x += this.speed * this.dir.x;
+                this.pos.y += this.speed * this.dir.y;
+                if (isOutOfBound(this.pos) || isWall(this.pos)) {
+                    if (this.speed == 1) {
+                        this.pos = save_pos;
+                        this.dir = dirs.NONE;
+                        return;
+                    }
+                    else {
+                        this.halfSpeed();
+                        this.move();
+                    }
+                }
+            }
+
+            doubleSpeed(){this.speed *= 2;}
+
+            halfSpeed() {this.speed /= 2;}
+
+            reset() {
                 this.pos = this.initPos;
                 this.speed = initSpeed;
             }
         }
         
-        function Ghost(id, pos, speed, frightened, color) {
-            Character.call(this, id, pos, speed);
-            
-            this.frightened = frightened;
-            this.timer = 0;
-            this.initColor = color;
-            this.color = color;
+        class Ghost extends Character {
+            constructor(id, color, pos, speed, frightened) {
+                super(id, color, pos, speed);
+                
+                this.frightened = frightened;
+                this.timer = 0;
+                this.initColor = color;
+            }
 
-            function reset() {
-                Character.prototype.reset.call(this);
+            reset() {
+                super.reset();
                 this.timer = 0;
                 this.frightened = false;
                 this.color = this.initColor;
             }
 
-            function scare() {
+            scare() {
                 this.frightened = true;
                 this.timer = SCARED_TIMER;
                 this.color = 'blue';
             }
 
-            function isScared() {
+            isScared() {
                 return this.scared;
             }
 
-            function decrementTimer() {
+            decrementTimer() {
                 this.timer--;
                 if (this.timer == 0) {
                     this.color = this.initColor;
@@ -103,15 +124,26 @@
             }
         }
 
-        function Pacman(id, pos, speed) {
-            Character.call(this, id, pos, speed);
-            this.lives = 3;
+        class Pacman extends Character {
+            constructor(id, pos, speed) {
+                super(id, "yellow", pos, speed);
+                this.lives = 3;
+                this.score = 0;
+            }
 
-            function decrementLives() {
+            move() {
+                super.move();
+                if (isFood(this.pos)) {
+                    this.score += 100;
+                    console.log(this.score);
+                }
+            }
+
+            decrementLives() {
                 this.lives--;
             }
 
-            function alive() {
+            alive() {
                 return this.lives > 0;
             }
         }
@@ -150,33 +182,40 @@
                     length: 10
                 }
             ];
+
+            var p1 = new Pacman(1, {x:0, y:0}, 1);
+            agents = [p1];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
-            px = 0;
-            py = 0;
-
-            drawPacman(px, py);
+            
+            drawAgents(agents);
             drawWalls();
             drawFoods();
-            // ctx.moveTo()
         }
+
         function drawFoods() {
             // starting from the top-left corner
-            let current_pos = {x:border.left + gs, y:border.top + gs};
+            // let current_pos = {x:border.left + gs, y:border.top + gs};
             ctx.fillStyle = "white";
             ctx.beginPath();
             
             for (var i = 0; i < gameState.length; i++) {
                 for (var j = 0; j < gameState[i].length; j++) {
                     if (gameState[i][j] === 'F') {
-                        ctx.moveTo(current_pos.x + j*gs, current_pos.y + i*gs);
-                        ctx.arc(current_pos.x + j*gs, current_pos.y + i*gs, rad/4, 0, 2*Math.PI, false);
-                        ctx.fill();
+                        let pos = getAbsPos({x:i,y:j});
+                        drawFoodDot(pos);
                     }
                 }
             }
         }
+
+        function drawFoodDot(pos) {
+            ctx.moveTo(pos.x, pos.y);
+            ctx.arc(pos.x, pos.y, rad/4, 0, 2*Math.PI, false);
+            ctx.fill();
+        }
+
         function drawWalls() {
             off_x = border.left;
             off_y = border.top;
@@ -204,47 +243,114 @@
             }
         }
 
-        function isWall(x, y) {
-            if (gameState[x][y] === 'W') return true;
-            return false;
+        function isWall(pos) {
+            return gameState[pos.x][pos.y] === 'W';
         }
         
-        function isFood(x, y) {
-            return gameState[x][y] === 'F';
+        function isFood(pos) {
+            return gameState[pos.x][pos.y] === 'F';
         }
 
-        function drawPacman(x, y, mouthClose=false) {
-            gameState[py][px] = 'N';
+        function isOutOfBound(pos) {
+            return (pos.x < 0 || pos.x >= gridHeight || pos.y < 0 || pos.y >= gridWidth);
+        }
+
+        function getAbsPos(pos) {
+            return {
+                x: border.left + (pos.y + 1) * gs,
+                y: border.top + (pos.x + 1) * gs
+            };
+        }
+
+        function updateAgents(agents) {
+            agents.forEach(agent => {
+                agent.move();
+            });
+        } 
+
+        function drawAgents(agents) {
+            agents.forEach(agent => {
+                if (agent instanceof Pacman) {
+                    drawPacman(agent);
+                }
+                else if (agent instanceof Ghost) {
+                    drawGhost(agent);
+                }
+            });
+        }
+
+        function drawPacman(pacman, mouthClose=false) {
+            pos = pacman.getPos();
+            gameState[pos.x][pos.y] = 'N';
             ctx.fillStyle="yellow";
             ctx.beginPath();
             var startingAngle;
             var endAngle;
-            // if (mouthClose) {
             startingAngle = 0;
             endAngle = 2*Math.PI;
-            // }
-            // else {
-            // startingAngle = Math.PI / 7;
-            // endAngle = -Math.PI / 7;
-            // }
-            real_x = border.left + (x + 1) * gs;
-            real_y = border.top + (y + 1) * gs;
-            ctx.moveTo(real_x, real_y);
-            ctx.arc(real_x, real_y, rad, startingAngle, endAngle, false);
-            
-            // ctx.lineTo(x - rad, x);
+            real_pos = getAbsPos(pos);
+            ctx.moveTo(real_pos.x, real_pos.y);
+            ctx.arc(real_pos.x, real_pos.y, rad, startingAngle, endAngle, false);
             ctx.fill();
         }
-        function undrawPacman(x, y) {
-            ctx.strokeStyle="black";
-            ctx.fillStyle = "black";
+
+        function drawGhost(ghost) {
+            ctx.fillStyle = ghost.color;
             ctx.beginPath();
-            real_x = border.left + (x + 1) * gs;
-            real_y = border.top + (y + 1) * gs;
-            ctx.moveTo(real_x, real_y);
-            ctx.arc(real_x, real_y, rad, 0, 2*Math.PI, false);
-            ctx.stroke();
+            pos = getAbsPos(ghost.getPos());
+            curr_pos = {
+                x: pos.x - gs/2,
+                y: pos.y + gs/2
+            };
+            ctx.moveTo(curr_pos.x, curr_pos.y);
+            curr_pos.y -= gs/2;
+            ctx.lineTo(curr_pos.x, curr_pos.y);
+            curr_pos.y -= gs/3
+            ctx.bezierCurveTo(curr_pos.x, curr_pos.y, 
+            curr_pos.x + gs/4, curr_pos.y - gs/6,
+            curr_pos.x + gs/2, curr_pos.y - gs/6);
+            curr_pos.x += gs/2;
+            curr_pos.y -= gs/6;
+
+            ctx.bezierCurveTo(curr_pos.x + gs/4, curr_pos.y, 
+            curr_pos.x + gs/2, curr_pos.y + gs/6,
+            curr_pos.x + gs/2, curr_pos.y + gs/2);
+            curr_pos.x += gs/2;
+            curr_pos.y += gs/2;
+            ctx.lineTo(curr_pos.x, curr_pos.y + gs/2);
+            curr_pos.y += gs/2;
+            ctx.lineTo(curr_pos.x - gs, curr_pos.y);
             ctx.fill();
+        }
+
+        // function undrawGhost(pos) {
+
+        //     ctx.fillStyle = "black";
+        //     ctx.fillRect(pos.x -gs/2, pos.y - gs/2, gs, gs);
+        //     if (isFood())
+        // }
+
+        // function undrawPacman(pos) {
+        //     // ctx.strokeStyle="black";
+        //     ctx.fillStyle = "black";
+        //     // ctx.beginPath();
+        //     real_pos = getAbsPos(pos);
+        //     ctx.moveTo(real_pos.x, real_pos.y);
+        //     ctx.arc(real_pos.x, real_pos.y, rad, 0, 2*Math.PI, false);
+        //     ctx.stroke();
+        //     ctx.fill();
+        // }
+        function undrawAgents(agents) {
+            ctx.fillStyle = "black";
+            agents.forEach(agent => {
+                rel_pos = agent.getPos();
+                real_pos = getAbsPos(rel_pos);
+                ctx.fillRect(real_pos.x - gs/2, real_pos.y - gs/2, gs, gs);
+
+                if (agent instanceof Ghost && isFood(rel_pos)) {
+                    drawFoodDot(real_pos);
+                }
+            });
         }
 
         function roundedRect(x, y, width, height, radius) {
@@ -262,48 +368,25 @@
         }
         
 		function game() {
-            console.log(score);
-            // if (mouthClose == true) {
-            //     mouthClose = false;
-            // }
-            // else {
-            //     mouthClose = true;
-            // }
-            undrawPacman(px, py);
-            if (px + xv < 0 || px + xv >= gridWidth) {
-                xv = 0;
-            }
-            if (py + yv < 0 || py + yv >= gridHeight) {
-                yv = 0;
-            }
-            if (isWall(py + yv, px + xv)) {
-                xv = 0;
-                yv = 0;
-            }
-            
-            px += xv;
-            py += yv;
-
-            if (isFood(py, px)) {
-                score += 100;
-            }
-
-            drawPacman(px, py, mouthClose);
+            // undrawPacman(px, py);
+            undrawAgents(agents);
+            updateAgents(agents);
+            drawAgents(agents);
         }
 
         function keyPush(evt) {
 			switch(evt.keyCode) {
 				case 37:
-					xv=-1;yv=0;
+					agents[0].dir = dirs.WEST;
 					break;
 				case 38:
-					xv=0;yv=-1;
+                    agents[0].dir = dirs.NORTH;
 					break;
 				case 39:
-					xv=1;yv=0;
+                    agents[0].dir = dirs.EAST;
 					break;
 				case 40:
-					xv=0;yv=1;
+                    agents[0].dir = dirs.SOUTH;
 					break;
 			}
 		}
