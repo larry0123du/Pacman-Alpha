@@ -2,7 +2,8 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <!-- <script type="text/javascript" href="js/binarySearch.js"></script> -->
 	</head>
 	<body>
 		<canvas id="gc"></canvas>
@@ -12,10 +13,15 @@
         var realWidth, realHeight;
         var border;
 
-        var px, py; // Starting position of Pacman
+        var px, py; // Starting position of Pacman. Note that in this system, x is the col number and y is the row number
         var mouthClose = false;
 
-        var exampleFoodGrid = Array(2048).fill(1);
+        // const foodGrid = Array(2048).fill(1);
+        var walls;
+        var gridWidth, gridHeight;
+
+        var gameState;
+        var score = 0;
 
         SCARED_TIMER = 60; // Set the scared time
         // define directions
@@ -115,53 +121,100 @@
             ctx.fillRect(0,0,canv.width,canv.height);
             realWidth = Math.floor(canv.width/gs) * gs;
             realHeight = Math.floor(canv.height/gs) * gs;
-            
-            foods = exampleFoodGrid;
-            ctx.strokeStyle="white";
             border = {
                 left:2.5*gs,
                 right:realWidth - 2.5*gs,
                 top:2.5*gs,
                 bottom:realHeight - 2.5*gs
             };
+            gridWidth = (border.right - border.left)/gs - 1;
+            gridHeight = (border.bottom - border.top)/gs - 1;
 
-            // for (var i = 0; i < Math.floor((canv.width/gs)*(canv.height/gs)/gs); i++) {
-            //     fx = Math.floor(Math.random()*Math.floor(canv.width/gs));
-            //     fy = Math.floor(Math.random()*Math.floor(canv.height/gs));
-            //     console.log(fx+","+fy);
-            //     foods.push({x:fx, y:fx});
-            //     ctx.fillRect(fx*gs, fy*gs, gs-15, gs-15);
-            // }
-            roundedRect(ctx, border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
-            roundedRect(ctx, border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
-            px = 3.5*gs;
-            py = 3.5*gs;
-            drawFoods(foods);
+            gameState = Array(gridHeight).fill().map(
+                () => Array(gridWidth).fill('F'));
+
+            ctx.strokeStyle="white";
+            // substantiate the walls
+            walls = [
+                // starts (1, 2)
+                {
+                    x: 1,
+                    y: 0,
+                    width: 1,
+                    length: 5
+                },
+                {
+                    x: 10,
+                    y: 8,
+                    width: 1,
+                    length: 10
+                }
+            ];
+            
+            roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
+            roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
+            px = 0;
+            py = 0;
+
             drawPacman(px, py);
+            drawWalls();
+            drawFoods();
             // ctx.moveTo()
         }
-        function drawFoods(foodGrid = []) {
+        function drawFoods() {
             // starting from the top-left corner
             let current_pos = {x:border.left + gs, y:border.top + gs};
+            ctx.fillStyle = "white";
             ctx.beginPath();
-            // ctx.moveTo(current_pos.x, current_pos.y);
-            for (var i = 0; i < foodGrid.length; i++) {
-                if (current_pos.x == border.right) {
-                    if (current_pos.y == border.bottom - gs) return;
-                    current_pos.x = border.left + gs;
-                    current_pos.y += gs;
+            
+            for (var i = 0; i < gameState.length; i++) {
+                for (var j = 0; j < gameState[i].length; j++) {
+                    if (gameState[i][j] === 'F') {
+                        ctx.moveTo(current_pos.x + j*gs, current_pos.y + i*gs);
+                        ctx.arc(current_pos.x + j*gs, current_pos.y + i*gs, rad/4, 0, 2*Math.PI, false);
+                        ctx.fill();
+                    }
                 }
-                ctx.moveTo(current_pos.x, current_pos.y);
-                if (foodGrid[i]) {
-                    ctx.fillStyle = "yellow";
-                    // ctx.strokeStyle = "yellow";
-                    ctx.arc(current_pos.x, current_pos.y, rad/4, 0, 2*Math.PI, false);
-                    ctx.fill();
-                }
-                current_pos.x += gs;
             }
         }
+        function drawWalls() {
+            off_x = border.left;
+            off_y = border.top;
+
+            ctx.beginPath();
+            ctx.fillStyle="black";
+            ctx.strokeStyle="white";
+            for (var i = 0; i < walls.length; i++) {
+                let curr_x = off_x + (walls[i].x + 1) * gs;
+                let curr_y = off_y + (walls[i].y + 1) * gs;
+
+                ctx.moveTo(curr_x, curr_y);
+                ctx.fillRect(curr_x - gs/2, curr_y - gs/2, walls[i].width*gs, walls[i].length*gs);
+                roundedRect(curr_x - gs/3
+                , curr_y - gs/3, 
+                walls[i].width * gs - gs/3,
+                walls[i].length * gs - gs/3,
+                walls[i].width * gs/5);
+
+                for (var k = 0; k < walls[i].length; k++) {
+                    for (var j = 0; j < walls[i].width; j++) {
+                        gameState[walls[i].y + k][walls[i].x + j] = 'W';
+                    }
+                }
+            }
+        }
+
+        function isWall(x, y) {
+            if (gameState[x][y] === 'W') return true;
+            return false;
+        }
+        
+        function isFood(x, y) {
+            return gameState[x][y] === 'F';
+        }
+
         function drawPacman(x, y, mouthClose=false) {
+            gameState[py][px] = 'N';
             ctx.fillStyle="yellow";
             ctx.beginPath();
             var startingAngle;
@@ -174,7 +227,10 @@
             // startingAngle = Math.PI / 7;
             // endAngle = -Math.PI / 7;
             // }
-            ctx.arc(x, y, rad, startingAngle, endAngle, false);
+            real_x = border.left + (x + 1) * gs;
+            real_y = border.top + (y + 1) * gs;
+            ctx.moveTo(real_x, real_y);
+            ctx.arc(real_x, real_y, rad, startingAngle, endAngle, false);
             
             // ctx.lineTo(x - rad, x);
             ctx.fill();
@@ -182,12 +238,16 @@
         function undrawPacman(x, y) {
             ctx.strokeStyle="black";
             ctx.fillStyle = "black";
-            ctx.arc(x, y, rad, 0, 2*Math.PI, false);
+            ctx.beginPath();
+            real_x = border.left + (x + 1) * gs;
+            real_y = border.top + (y + 1) * gs;
+            ctx.moveTo(real_x, real_y);
+            ctx.arc(real_x, real_y, rad, 0, 2*Math.PI, false);
             ctx.stroke();
             ctx.fill();
         }
 
-        function roundedRect(ctx, x, y, width, height, radius) {
+        function roundedRect(x, y, width, height, radius) {
             ctx.beginPath();
             ctx.moveTo(x, y + radius);
             ctx.lineTo(x, y + height - radius);
@@ -202,6 +262,7 @@
         }
         
 		function game() {
+            console.log(score);
             // if (mouthClose == true) {
             //     mouthClose = false;
             // }
@@ -209,30 +270,40 @@
             //     mouthClose = true;
             // }
             undrawPacman(px, py);
-            if (px + xv <= border.left || px + xv >= border.right) {
+            if (px + xv < 0 || px + xv >= gridWidth) {
                 xv = 0;
             }
-            if (py + yv <= border.top || py + yv >= border.bottom) {
+            if (py + yv < 0 || py + yv >= gridHeight) {
                 yv = 0;
             }
+            if (isWall(py + yv, px + xv)) {
+                xv = 0;
+                yv = 0;
+            }
+            
             px += xv;
             py += yv;
+
+            if (isFood(py, px)) {
+                score += 100;
+            }
+
             drawPacman(px, py, mouthClose);
         }
 
         function keyPush(evt) {
 			switch(evt.keyCode) {
 				case 37:
-					xv=-gs;yv=0;
+					xv=-1;yv=0;
 					break;
 				case 38:
-					xv=0;yv=-gs;
+					xv=0;yv=-1;
 					break;
 				case 39:
-					xv=gs;yv=0;
+					xv=1;yv=0;
 					break;
 				case 40:
-					xv=0;yv=gs;
+					xv=0;yv=1;
 					break;
 			}
 		}
