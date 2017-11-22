@@ -16,7 +16,6 @@
         var px, py; // Starting position of Pacman. Note that in this system, x is the col number and y is the row number
         var mouthClose = false;
 
-        // const foodGrid = Array(2048).fill(1);
         var walls;
         var gridWidth, gridHeight;
 
@@ -49,7 +48,10 @@
             constructor(id, color, pos, speed) {
                 this.id = id;
                 this.color = color;
-                this.initPos = pos;
+                this.initPos = {
+                    x:pos.x,
+                    y:pos.y
+                };
                 this.pos = pos;
                 this.initSpeed = speed;
                 this.speed = speed;
@@ -84,8 +86,11 @@
             halfSpeed() {this.speed /= 2;}
 
             reset() {
-                this.pos = this.initPos;
-                this.speed = initSpeed;
+                this.pos = {
+                    x:this.initPos.x,
+                    y:this.initPos.y
+                };
+                this.speed = this.initSpeed;
             }
         }
         
@@ -294,7 +299,7 @@
 
         function drawPacman(pacman, mouthClose=false) {
             pos = pacman.getPos();
-            gameState[pos.x][pos.y] = 'N';
+            gameState[pos.x][pos.y] = 'P';
             ctx.fillStyle="yellow";
             ctx.beginPath();
             var startingAngle;
@@ -311,7 +316,17 @@
         function drawGhost(ghost) {
             pos = ghost.getPos();
             if (gameState[pos.x][pos.y] === 'F') {
+                // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
+            }
+            else if (gameState[pos.x][pos.y] === 'P') {
+                // Collision w/ Pacman
+                agents[0].decrementLives();
+                if (!agents[0].alive()) {
+                    // Game is over
+                    
+                }
+                agents[0].reset();
             }
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
@@ -350,9 +365,15 @@
                 real_pos = getAbsPos(rel_pos);
                 ctx.fillRect(real_pos.x - gs/2, real_pos.y - gs/2, gs, gs);
 
-                if (agent instanceof Ghost && gameState[rel_pos.x][rel_pos.y] === 'G') {
-                    gameState[rel_pos.x][rel_pos.y] = 'F';
-                    drawFoodDot(real_pos);
+                if (agent instanceof Ghost) {
+                    if (gameState[rel_pos.x][rel_pos.y] === 'G') {
+                        gameState[rel_pos.x][rel_pos.y] = 'F';
+                        drawFoodDot(real_pos);
+                    }
+                }
+                else {
+                    console.log(agent.initPos);
+                    gameState[rel_pos.x][rel_pos.y] = 'N';
                 }
             });
         }
@@ -374,7 +395,6 @@
         }
         
 		function game() {
-            // undrawPacman(px, py);
             undrawAgents(agents);
             updateAgents(agents);
             drawAgents(agents);
