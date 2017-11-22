@@ -118,7 +118,7 @@
             }
 
             isScared() {
-                return this.scared;
+                return this.frightened;
             }
 
             decrementTimer() {
@@ -143,6 +143,15 @@
                     this.score += 100;
                     console.log(this.score);
                 }
+				if (isSuperFood(this.pos)) {
+					this.score += 100;
+					console.log(this.score);
+					agents.forEach(agent => {
+						if (agent instanceof Ghost) {
+							agent.scare();
+						}
+					});
+				}
             }
 
             decrementLives() {
@@ -170,6 +179,7 @@
 
             gameState = Array(gridHeight).fill().map(
                 () => Array(gridWidth).fill('F'));
+			gameState[Math.floor(gridHeight/2)][Math.floor(gridWidth/2)] = 'S';
 
             ctx.strokeStyle="white";
             // substantiate the walls
@@ -213,6 +223,10 @@
                         let pos = getAbsPos({x:i,y:j});
                         drawFoodDot(pos);
                     }
+					if (gameState[i][j] == 'S') {
+						let pos = getAbsPos({x:i,y:j});
+						drawSuperFoodDot(pos);
+					}
                 }
             }
         }
@@ -222,6 +236,15 @@
             ctx.fillStyle = "white";
             ctx.moveTo(pos.x, pos.y);
             ctx.arc(pos.x, pos.y, rad/4, 0, 2*Math.PI, false);
+
+            ctx.closePath();
+            ctx.fill();
+        }
+        function drawSuperFoodDot(pos) {
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.moveTo(pos.x, pos.y);
+            ctx.arc(pos.x, pos.y, rad/2, 0, 2*Math.PI, false);
 
             ctx.closePath();
             ctx.fill();
@@ -264,6 +287,10 @@
             return gameState[pos.x][pos.y] === 'F';
         }
 
+		function isSuperFood(pos) {
+			return gameState[pos.x][pos.y] == 'S';
+		}
+
         function isOutOfBound(pos) {
             return (pos.x < 0 || pos.x >= gridHeight || pos.y < 0 || pos.y >= gridWidth);
         }
@@ -278,6 +305,10 @@
         function updateAgents(agents) {
             agents.forEach(agent => {
                 agent.move();
+				if (agent instanceof Ghost && agent.isScared()) {
+					agent.decrementTimer();
+					console.log(agent.timer);
+				}
             });
         } 
 
