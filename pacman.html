@@ -93,14 +93,14 @@
             constructor(id, color, pos, speed, frightened) {
                 super(id, color, pos, speed);
                 
-                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 5)]];
+                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
                 this.frightened = frightened;
                 this.timer = 0;
                 this.initColor = color;
             }
 
             move() {
-                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 5)]];
+                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
                 super.move();
             }
 
@@ -203,9 +203,9 @@
 
         function drawFoods() {
             // starting from the top-left corner
-            // let current_pos = {x:border.left + gs, y:border.top + gs};
+            
             ctx.fillStyle = "white";
-            ctx.beginPath();
+            // ctx.beginPath();
             
             for (var i = 0; i < gameState.length; i++) {
                 for (var j = 0; j < gameState[i].length; j++) {
@@ -218,8 +218,12 @@
         }
 
         function drawFoodDot(pos) {
+            ctx.beginPath();
+            ctx.fillStyle = "white";
             ctx.moveTo(pos.x, pos.y);
             ctx.arc(pos.x, pos.y, rad/4, 0, 2*Math.PI, false);
+
+            ctx.closePath();
             ctx.fill();
         }
 
@@ -248,6 +252,8 @@
                     }
                 }
             }
+
+            ctx.closePath();
         }
 
         function isWall(pos) {
@@ -298,16 +304,21 @@
             real_pos = getAbsPos(pos);
             ctx.moveTo(real_pos.x, real_pos.y);
             ctx.arc(real_pos.x, real_pos.y, rad, startingAngle, endAngle, false);
+            ctx.closePath();
             ctx.fill();
         }
 
         function drawGhost(ghost) {
+            pos = ghost.getPos();
+            if (gameState[pos.x][pos.y] === 'F') {
+                gameState[pos.x][pos.y] = 'G';
+            }
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
-            pos = getAbsPos(ghost.getPos());
+            abs_pos = getAbsPos(pos);
             curr_pos = {
-                x: pos.x - gs/2,
-                y: pos.y + gs/2
+                x: abs_pos.x - gs/2,
+                y: abs_pos.y + gs/2
             };
             ctx.moveTo(curr_pos.x, curr_pos.y);
             curr_pos.y -= gs/2;
@@ -327,26 +338,11 @@
             ctx.lineTo(curr_pos.x, curr_pos.y + gs/2);
             curr_pos.y += gs/2;
             ctx.lineTo(curr_pos.x - gs, curr_pos.y);
+
+            ctx.closePath();
             ctx.fill();
         }
 
-        // function undrawGhost(pos) {
-
-        //     ctx.fillStyle = "black";
-        //     ctx.fillRect(pos.x -gs/2, pos.y - gs/2, gs, gs);
-        //     if (isFood())
-        // }
-
-        // function undrawPacman(pos) {
-        //     // ctx.strokeStyle="black";
-        //     ctx.fillStyle = "black";
-        //     // ctx.beginPath();
-        //     real_pos = getAbsPos(pos);
-        //     ctx.moveTo(real_pos.x, real_pos.y);
-        //     ctx.arc(real_pos.x, real_pos.y, rad, 0, 2*Math.PI, false);
-        //     ctx.stroke();
-        //     ctx.fill();
-        // }
         function undrawAgents(agents) {
             ctx.fillStyle = "black";
             agents.forEach(agent => {
@@ -354,7 +350,8 @@
                 real_pos = getAbsPos(rel_pos);
                 ctx.fillRect(real_pos.x - gs/2, real_pos.y - gs/2, gs, gs);
 
-                if (agent instanceof Ghost && isFood(rel_pos)) {
+                if (agent instanceof Ghost && gameState[rel_pos.x][rel_pos.y] === 'G') {
+                    gameState[rel_pos.x][rel_pos.y] = 'F';
                     drawFoodDot(real_pos);
                 }
             });
@@ -371,6 +368,8 @@
             ctx.arcTo(x + width, y, x + width - radius, y, radius);
             ctx.lineTo(x + radius, y);
             ctx.arcTo(x, y, x, y + radius, radius);
+
+            ctx.closePath();
             ctx.stroke();
         }
         
