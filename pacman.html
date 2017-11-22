@@ -93,9 +93,15 @@
             constructor(id, color, pos, speed, frightened) {
                 super(id, color, pos, speed);
                 
+                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 5)]];
                 this.frightened = frightened;
                 this.timer = 0;
                 this.initColor = color;
+            }
+
+            move() {
+                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 5)]];
+                super.move();
             }
 
             reset() {
@@ -184,7 +190,8 @@
             ];
 
             var p1 = new Pacman(1, {x:0, y:0}, 1);
-            agents = [p1];
+            var g1 = new Ghost(1, "red", {x:3, y:4}, 1, false);
+            agents = [p1, g1];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
