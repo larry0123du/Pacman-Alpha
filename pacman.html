@@ -355,7 +355,28 @@
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
             }
+<<<<<<< HEAD
             
+=======
+			else if (gameState[pos.x][pos.y] == 'S') {
+				gameState[pso.x][pos.y] = 'X';
+			}
+            else if (gameState[pos.x][pos.y] === 'P') {
+				//check if ghost is frightened
+				if (ghost.isScared()) {
+					ghost.reset();
+					agents[0].score += 200;
+				}
+				else {	
+                // Collision w/ Pacman
+               		 agents[0].decrementLives();
+                	if (!agents[0].alive()) {
+                    	// Game is over
+              	    }
+               		agents[0].reset();
+				}
+            }
+>>>>>>> b8558e06a6b9d60d39d5a88835ce46dacca0f93c
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
             abs_pos = getAbsPos(pos);
@@ -398,9 +419,12 @@
                         gameState[rel_pos.x][rel_pos.y] = 'F';
                         drawFoodDot(real_pos);
                     }
+                    if (gameState[rel_pos.x][rel_pos.y] === 'X') {
+                        gameState[rel_pos.x][rel_pos.y] = 'S';
+                        drawSuperFoodDot(real_pos);
+                    }
                 }
                 else {
-                    console.log(agent.initPos);
                     gameState[rel_pos.x][rel_pos.y] = 'N';
                 }
             });
