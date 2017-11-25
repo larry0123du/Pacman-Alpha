@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
         <link rel="stylesheet" href="css/styles.css">
         <!-- <script type="text/javascript" href="js/binarySearch.js"></script> -->
+        <script src="/socket.io/socket.io.js"></script>
 	</head>
 	<body>
 		<canvas id="gc"></canvas>
@@ -21,6 +22,8 @@
 
         var gameState;
         var agents;
+
+        var socket;
 
         SCARED_TIMER = 60; // Set the scared time
         // define directions
@@ -169,6 +172,8 @@
         }
 
         function init() {
+            socket = io.connect('http://localhost:8000');
+
             ctx.fillStyle="black";
             ctx.fillRect(0,0,canv.width,canv.height);
             realWidth = Math.floor(canv.width/gs) * gs;
@@ -350,15 +355,7 @@
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
             }
-            else if (gameState[pos.x][pos.y] === 'P') {
-                // Collision w/ Pacman
-                agents[0].decrementLives();
-                if (!agents[0].alive()) {
-                    // Game is over
-                    console.log("Game Over");
-                }
-                agents[0].reset();
-            }
+            
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
             abs_pos = getAbsPos(pos);
@@ -426,8 +423,20 @@
         }
         
 		function game() {
+            // Check for collision here
+            
+                
             undrawAgents(agents);
             updateAgents(agents);
+            // Collision w/ Pacman
+            agents[0].decrementLives();
+            if (!agents[0].alive()) {
+                // Game is over
+                console.log("Game Over");
+                var scores = {id:agent[0].id, score:agent[0].score};
+                socket.emit('scores', scores);
+            }
+            agents[0].reset();
             drawAgents(agents);
         }
 
