@@ -22,6 +22,7 @@
 
         var gameState;
         var agents;
+        var pacmans, ghosts;
 
         var socket;
 
@@ -46,16 +47,20 @@
 			setInterval(game,600);
 		}
 
+        function copyPos(pos) {
+            return {
+                x:pos.x,
+                y:pos.y
+            };
+        }
 
         class Character {
             constructor(id, color, pos, speed) {
                 this.id = id;
                 this.color = color;
-                this.initPos = {
-                    x:pos.x,
-                    y:pos.y
-                };
+                this.initPos = copyPos(pos);
                 this.pos = pos;
+                this.lastPos = null;
                 this.initSpeed = speed;
                 this.speed = speed;
                 this.dir = dirs.NONE;
@@ -64,16 +69,13 @@
             getPos() {return this.pos;}
 
             move() {
-                let save_pos = {
-                    x: this.pos.x,
-                    y: this.pos.y
-                };
+                this.lastPos = copyPos(this.pos);
 
                 this.pos.x += this.speed * this.dir.x;
                 this.pos.y += this.speed * this.dir.y;
                 if (isOutOfBound(this.pos) || isWall(this.pos)) {
                     if (this.speed == 1) {
-                        this.pos = save_pos;
+                        this.pos = copyPos(this.lastPos);
                         this.dir = dirs.NONE;
                         return;
                     }
@@ -89,10 +91,7 @@
             halfSpeed() {this.speed /= 2;}
 
             reset() {
-                this.pos = {
-                    x:this.initPos.x,
-                    y:this.initPos.y
-                };
+                this.pos = copyPos(this.initPos);
                 this.speed = this.initSpeed;
             }
         }
@@ -169,6 +168,11 @@
             alive() {
                 return this.lives > 0;
             }
+
+            reset() {
+                this.dir = dirs.NONE;
+                super.reset();
+            }
         }
 
         function init() {
@@ -212,11 +216,13 @@
             var p1 = new Pacman(1, {x:0, y:0}, 1);
             var g1 = new Ghost(1, "red", {x:3, y:4}, 1, false);
             agents = [p1, g1];
+            pacmans = [p1];
+            ghosts = [g1];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
             
-            drawAgents(agents);
+            drawAgents();
             drawWalls();
             drawFoods();
         }
@@ -312,7 +318,24 @@
             };
         }
 
-        function updateAgents(agents) {
+        function getGhostAtPos(pos) {
+            agents.forEach(agent => {
+                if (agent instanceof Ghost) {
+                    agentPos = agent.getPos();
+                    if (agentPos.x == pos.x && agentPos.y == pos.y) {
+                        return agent;
+                    }
+                }
+            });
+            return null;
+        }
+
+        function print_pos(agent) {
+            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
+             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
+        }
+
+        function updateAgents() {
             agents.forEach(agent => {
                 agent.move();
 				if (agent instanceof Ghost && agent.isScared()) {
@@ -322,19 +345,20 @@
             });
         } 
 
-        function drawAgents(agents) {
-            agents.forEach(agent => {
-                if (agent instanceof Pacman) {
-                    drawPacman(agent);
-                }
-                else if (agent instanceof Ghost) {
-                    drawGhost(agent);
-                }
+        function drawAgents() {
+            pacmans.forEach(pacman => {
+                drawPacman(pacman);
+            });
+            ghosts.forEach(ghost => {
+                drawGhost(ghost);
             });
         }
 
         function drawPacman(pacman, mouthClose=false) {
             pos = pacman.getPos();
+            // if ((ghost = getGhostAtPos(pos)) != null) {
+            //     handle_collision(pacman, ghost);
+            // }
             gameState[pos.x][pos.y] = 'P';
             ctx.fillStyle="yellow";
             ctx.beginPath();
@@ -355,28 +379,13 @@
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
             }
-<<<<<<< HEAD
             
-=======
 			else if (gameState[pos.x][pos.y] == 'S') {
 				gameState[pso.x][pos.y] = 'X';
 			}
-            else if (gameState[pos.x][pos.y] === 'P') {
-				//check if ghost is frightened
-				if (ghost.isScared()) {
-					ghost.reset();
-					agents[0].score += 200;
-				}
-				else {	
-                // Collision w/ Pacman
-               		 agents[0].decrementLives();
-                	if (!agents[0].alive()) {
-                    	// Game is over
-              	    }
-               		agents[0].reset();
-				}
-            }
->>>>>>> b8558e06a6b9d60d39d5a88835ce46dacca0f93c
+            // else if (gameState[pos.x][pos.y] === 'P') {
+            //     handle_collision(agents[0], ghost);
+            // }
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
             abs_pos = getAbsPos(pos);
@@ -407,7 +416,7 @@
             ctx.fill();
         }
 
-        function undrawAgents(agents) {
+        function undrawAgents() {
             ctx.fillStyle = "black";
             agents.forEach(agent => {
                 rel_pos = agent.getPos();
@@ -445,23 +454,83 @@
             ctx.closePath();
             ctx.stroke();
         }
-        
-		function game() {
-            // Check for collision here
+
+        function check_collision(pacman, ghost) {
+            ppos = pacman.getPos();
+            gpos = ghost.getPos();
             
-                
-            undrawAgents(agents);
-            updateAgents(agents);
-            // Collision w/ Pacman
-            agents[0].decrementLives();
-            if (!agents[0].alive()) {
-                // Game is over
-                console.log("Game Over");
-                var scores = {id:agent[0].id, score:agent[0].score};
-                socket.emit('scores', scores);
+            console.log("ppos: " + JSON.stringify(ppos));
+            console.log('gpos: ' + JSON.stringify(gpos));
+
+            if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
+                return true;
             }
-            agents[0].reset();
-            drawAgents(agents);
+            plast = pacman.lastPos;
+            glast = ghost.lastPos;
+
+            console.log('plastPos: ' + JSON.stringify(plast));
+            console.log('glastPos: ' + JSON.stringify(glast));
+
+            if (ppos.x == plast.x && ppos.x == gpos.x && plast.x == glast.x) {
+                // The pacman and the ghost were traveling on the same row
+                if ((plast.y - glast.y) * (ppos.y - gpos.y) < 0) {
+                    // Their paths intersect
+                    console.log("collision along row");
+                    return true;
+                }
+            }
+            else if (ppos.y == plast.y && ppos.y == gpos.y && plast.y == glast.y) {
+                // traveling on the same column
+                if ((plast.x - glast.x) * (ppos.x - gpos.x) < 0) {
+                    console.log("collision along column");
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function handle_collision(pacman, ghost) {
+            //check if ghost is frightened
+            if (ghost.isScared()) {
+                ghost.reset();
+                pacman.score += 200;
+            }
+            else {	
+            // Collision w/ Pacman
+                pacman.decrementLives();
+                if (!pacman.alive()) {
+                    // Game is over
+                    console.log("Game Over");
+                    var scores = {id:pacman.id, score:pacman.score};
+                    socket.emit('scores', scores);
+                }
+                pacman.reset();
+            }
+
+            print_pos(pacman);
+            print_pos(ghost);
+        }
+
+		function game() {
+            undrawAgents();
+            updateAgents();
+            pacmans.forEach(pacman => {
+                ghosts.forEach(ghost => {
+                    if (check_collision(pacman, ghost)) {
+                        handle_collision(pacman, ghost);
+                    }
+                });
+            });
+            // // Collision w/ Pacman
+            // agents[0].decrementLives();
+            // if (!agents[0].alive()) {
+            //     // Game is over
+            //     console.log("Game Over");
+            //     var scores = {id:agent[0].id, score:agent[0].score};
+            //     socket.emit('scores', scores);
+            // }
+            // agents[0].reset();
+            drawAgents();
         }
 
         function keyPush(evt) {

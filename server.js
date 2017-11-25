@@ -4,7 +4,7 @@ var qstr = require('querystring');
 var url = require('url');
 
 
-http.createServer(function(req, res) {
+var server = http.createServer(function(req, res) {
     pathName = url.parse(req.url).pathname;
     if (pathName === '/') pathName += 'pacman.html';
     fs.readFile(__dirname + pathName, function(err, data) {
@@ -27,4 +27,13 @@ http.createServer(function(req, res) {
         }
     });
     console.log('port 8000: request for ' + pathName);
-}).listen(8000);
+});
+
+var io = require('socket.io')(server);
+io.on('connection', function(client){
+  client.on('scores', function(data){
+      console.log(data);
+  });
+  client.on('disconnect', function(){});
+});
+server.listen(8000);
