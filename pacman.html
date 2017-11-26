@@ -215,10 +215,12 @@
             ];
 
             var p1 = new Pacman(1, {x:0, y:0}, 1);
-            var g1 = new Ghost(1, "red", {x:3, y:4}, 1, false);
-            agents = [p1, g1];
+            var g1 = new Ghost(2, "red", {x:3, y:4}, 1, false);
+            var g2 = new Ghost(3, "green", {x:4, y:4}, 1, false);
+            var g3 = new Ghost(4, "blue", {x:3, y:5}, 1, false);
+            agents = [p1, g1, g2, g3];
             pacmans = [p1];
-            ghosts = [g1];
+            ghosts = [g1, g2, g3];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
@@ -339,11 +341,6 @@
             return null;
         }
 
-        function print_pos(agent) {
-            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
-             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
-        }
-
         function updateAgents() {
             agents.forEach(agent => {
                 agent.move();
@@ -387,14 +384,16 @@
             if (gameState[pos.x][pos.y] === 'F') {
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
-            }
-            
+            }            
 			else if (gameState[pos.x][pos.y] == 'S') {
-				gameState[pso.x][pos.y] = 'X';
+				gameState[pos.x][pos.y] = 'X';
 			}
-            // else if (gameState[pos.x][pos.y] === 'P') {
-            //     handle_collision(agents[0], ghost);
-            // }
+            else if (gameState[pos.x][pos.y] === 'G' || gameState[pos.x][pos.y] === 'X') {
+                // handle_collision(agents[0], ghost);
+                ghost.pos = copyPos(ghost.lastPos);
+            }
+            pos = ghost.getPos();
+
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
             abs_pos = getAbsPos(pos);
@@ -426,10 +425,11 @@
         }
 
         function undrawAgents() {
-            ctx.fillStyle = "black";
             agents.forEach(agent => {
                 rel_pos = agent.getPos();
                 real_pos = getAbsPos(rel_pos);
+
+                ctx.fillStyle = "black";
                 ctx.fillRect(real_pos.x - gs/2, real_pos.y - gs/2, gs, gs);
 
                 if (agent instanceof Ghost) {
@@ -468,8 +468,8 @@
             ppos = pacman.getPos();
             gpos = ghost.getPos();
             
-            console.log("ppos: " + JSON.stringify(ppos));
-            console.log('gpos: ' + JSON.stringify(gpos));
+            // console.log("ppos: " + JSON.stringify(ppos));
+            // console.log('gpos: ' + JSON.stringify(gpos));
 
             if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
                 return true;
@@ -477,21 +477,21 @@
             plast = pacman.lastPos;
             glast = ghost.lastPos;
 
-            console.log('plastPos: ' + JSON.stringify(plast));
-            console.log('glastPos: ' + JSON.stringify(glast));
+            // console.log('plastPos: ' + JSON.stringify(plast));
+            // console.log('glastPos: ' + JSON.stringify(glast));
 
             if (ppos.x == plast.x && ppos.x == gpos.x && plast.x == glast.x) {
                 // The pacman and the ghost were traveling on the same row
                 if ((plast.y - glast.y) * (ppos.y - gpos.y) < 0) {
                     // Their paths intersect
-                    console.log("collision along row");
+                    // console.log("collision along row");
                     return true;
                 }
             }
             else if (ppos.y == plast.y && ppos.y == gpos.y && plast.y == glast.y) {
                 // traveling on the same column
                 if ((plast.x - glast.x) * (ppos.x - gpos.x) < 0) {
-                    console.log("collision along column");
+                    // console.log("collision along column");
                     return true;
                 }
             }
@@ -520,7 +520,21 @@
             print_pos(ghost);
         }
 
+        function print_pos(agent) {
+            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
+             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
+        }
+
+        function printBoard() {
+            gameState.forEach(row => {
+                console.log(row.join());
+            });
+            console.log();
+        }
+
 		function game() {
+            // printBoard();
+
             undrawAgents();
             updateAgents();
             updateBoard();
