@@ -10,7 +10,7 @@
 		<canvas id="gc"></canvas>
 		<script>
         var gs; // size of one grid
-        const rad = 0.5*gs;
+        var rad;
         var realWidth, realHeight;
         var border;
 
@@ -178,7 +178,8 @@
         function init() {
             socket = io.connect('http://localhost:8000');
 			gs = Math.min((canv.width/37), (canv.height/28));
-            ctx.fillStyle="black";
+            rad = 0.5*gs;
+			ctx.fillStyle="black";
             ctx.fillRect(0,0,canv.width,canv.height-50);
             realWidth = Math.floor(canv.width/gs) * gs;
             realHeight = Math.floor((canv.height-50)/gs) * gs;
@@ -348,7 +349,7 @@
                 agent.move();
 				if (agent instanceof Ghost && agent.isScared()) {
 					agent.decrementTimer();
-					console.log(agent.timer);
+		//			console.log(agent.timer);
 				}
             });
         } 
