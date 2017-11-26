@@ -9,7 +9,7 @@
 	<body>
 		<canvas id="gc"></canvas>
 		<script>
-        const gs=20; // size of one grid
+        var gs; // size of one grid
         const rad = 0.5*gs;
         var realWidth, realHeight;
         var border;
@@ -39,7 +39,7 @@
 		window.onload=function() {
 			canv=document.getElementById("gc");
 			canv.width = window.innerWidth;
-			canv.height = window.innerHeight;
+			canv.height = window.innerHeight;;
 		
 			ctx=canv.getContext("2d");
             document.addEventListener("keydown",keyPush);
@@ -177,19 +177,19 @@
 
         function init() {
             socket = io.connect('http://localhost:8000');
-
+			gs = Math.min((canv.width/37), (canv.height/28));
             ctx.fillStyle="black";
-            ctx.fillRect(0,0,canv.width,canv.height);
+            ctx.fillRect(0,0,canv.width,canv.height-50);
             realWidth = Math.floor(canv.width/gs) * gs;
-            realHeight = Math.floor(canv.height/gs) * gs;
+            realHeight = Math.floor((canv.height-50)/gs) * gs;
             border = {
-                left:2.5*gs,
-                right:realWidth - 2.5*gs,
-                top:2.5*gs,
-                bottom:realHeight - 2.5*gs
+                left:(canv.width-33*gs)/2,
+                right:(canv.width+33*gs)/2,
+                top:(canv.height-21*gs)/2,
+                bottom:(canv.height+21*gs)/2
             };
-            gridWidth = (border.right - border.left)/gs - 1;
-            gridHeight = (border.bottom - border.top)/gs - 1;
+            gridWidth = 32;
+            gridHeight = 20;
 
             gameState = Array(gridHeight).fill().map(
                 () => Array(gridWidth).fill('F'));
@@ -227,6 +227,14 @@
             drawFoods();
         }
 
+		function updateBoard() {
+			ctx.fillStyle = "black";
+			ctx.fillRect(0,canv.height-50, canv.width, 50);
+			ctx.font = "15px Lucida Console";
+			ctx.fillStyle = "white";
+			ctx.fillText("Score: " + agents[0].score, canv.width/2, (canv.height-40)); 
+			ctx.fillText("Lives: " + agents[0].lives, canv.width/2, (canv.height-25)); 
+		}
         function drawFoods() {
             // starting from the top-left corner
             
@@ -514,7 +522,8 @@
 		function game() {
             undrawAgents();
             updateAgents();
-            pacmans.forEach(pacman => {
+            updateBoard();
+			pacmans.forEach(pacman => {
                 ghosts.forEach(ghost => {
                     if (check_collision(pacman, ghost)) {
                         handle_collision(pacman, ghost);
