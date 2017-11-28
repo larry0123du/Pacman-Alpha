@@ -20,7 +20,7 @@
         var walls;
         var gridWidth, gridHeight;
 
-        var gameState;
+        var gameState;;
         var agents;
         var pacmans, ghosts;
 
@@ -177,19 +177,19 @@
 
         function init() {
             socket = io.connect('http://localhost:8000');
-			gs = Math.min((canv.width/37), (canv.height/30));
+			gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
 			ctx.fillStyle="black";
             ctx.fillRect(0,0,canv.width,canv.height-50);
             realWidth = Math.floor(canv.width/gs) * gs;
             realHeight = Math.floor((canv.height-50)/gs) * gs;
             border = {
-                left:(canv.width-33*gs)/2,
-                right:(canv.width+33*gs)/2,
+                left:(canv.width-34*gs)/2,
+                right:(canv.width+34*gs)/2,
                 top:(canv.height-21*gs)/2,
                 bottom:(canv.height+21*gs)/2
             };
-            gridWidth = 32;
+            gridWidth = 33;
             gridHeight = 20;
 
             gameState = Array(gridHeight).fill().map(
@@ -200,25 +200,84 @@
             // substantiate the walls
             walls = [
                 // starts (1, 2)
-                {
-                    x: 1,
-                    y: 0,
-                    width: 1,
-                    length: 5
-                },
-                {
-                    x: 10,
-                    y: 8,
-                    width: 1,
-                    length: 10
-                }
+                {x: 1, y: 1,width: 2,length: 3},
+                {x: 4, y: 1,width: 3,length: 3},
+                {x: 8, y: 1,width: 2,length: 3},
+                {x: 11, y: 1,width: 4,length: 1},
+                {x: 16, y: 0,width: 1,length: 4},
+                {x: 18, y: 1,width: 4,length: 1},
+                {x: 23, y: 1,width: 2,length: 3},
+                {x: 26, y: 1,width: 3,length: 3},
+                {x: 30, y: 1,width: 2,length: 3},
+                {x: 11, y: 3,width: 1,length: 1},
+                {x: 13, y: 3,width: 2,length: 1},
+                {x: 18, y: 3,width: 2,length: 1},
+                {x: 21, y: 3,width: 1,length: 1},
+                {x: 1, y: 5,width: 2,length: 1},
+                {x: 4, y: 5,width: 1,length: 4},
+                {x: 6, y: 5,width: 5,length: 1},
+                {x: 12, y: 5,width: 2,length: 1},
+                {x: 15, y: 5,width: 3,length: 1},
+                {x: 19, y: 5,width: 2,length: 1},
+                {x: 22, y: 5,width: 5,length: 1},
+                {x: 28, y: 5,width: 1,length: 4},
+                {x: 30, y: 5,width: 2,length: 1},
+                {x: 13, y: 6,width: 1,length: 3},
+                {x: 19, y: 6,width: 1,length: 3},
+                {x: 24, y: 6,width: 1,length: 2},
+                {x: 0, y: 7,width: 3,length: 1},
+                {x: 5, y: 7,width: 2,length: 1},
+                {x: 10, y: 7,width: 2,length: 1},
+                {x: 15, y: 7,width: 1,length: 2},
+                {x: 17, y: 7,width: 1,length: 2},
+                {x: 26, y: 7,width: 2,length: 1},
+                {x: 30, y: 7,width: 3,length: 1},
+                {x: 2, y: 8,width: 1,length: 3},
+                {x: 30, y: 8,width: 1,length: 3},
+                {x: 6, y: 9,width: 2,length: 2},
+                {x: 9, y: 9,width: 3,length: 2},
+                {x: 21, y: 9,width: 3,length: 2},
+                {x: 25, y: 9,width: 2,length: 2},
+                {x: 4, y: 10,width: 1,length: 1},
+                {x: 13, y: 10,width: 3,length: 1},
+                {x: 17, y: 10,width: 3,length: 1},
+                {x: 28, y: 10,width: 1,length: 1},
+                {x: 0, y: 11,width: 3,length: 1},
+                {x: 13, y: 11,width: 1,length: 2},
+                {x: 19, y: 11,width: 1,length: 2},
+                {x: 30, y: 11,width: 3,length: 1},
+                {x: 4, y: 12,width: 5,length: 2},
+                {x: 11, y: 12,width: 1,length: 1},
+                {x: 21, y: 12,width: 1,length: 1},
+                {x: 23, y: 12,width: 5,length: 2},
+                {x: 1, y: 13,width: 2,length: 1},
+                {x: 13, y: 13,width: 7,length: 1},
+                {x: 1, y: 14,width: 1,length: 2},
+                {x: 11, y: 14,width: 1,length: 1},
+                {x: 21, y: 14,width: 1,length: 1},
+                {x: 31, y: 14,width: 1,length: 2},
+                {x: 3, y: 15,width: 4,length: 1},
+                {x: 8, y: 15,width: 8,length: 1},
+                {x: 17, y: 15,width: 8,length: 1},
+                {x: 26, y: 15,width: 4,length: 1},
+                {x: 1, y: 17,width: 5,length: 2},
+                {x: 7, y: 17,width: 3,length: 2},
+                {x: 11, y: 17,width: 2,length: 2},
+                {x: 14, y: 17,width: 1,length: 2},
+                {x: 16, y: 17,width: 1,length: 3},
+                {x: 18, y: 17,width: 1,length: 2},
+                {x: 20, y: 17,width: 2,length: 2},
+                {x: 23, y: 17,width: 3,length: 2},
+                {x: 27, y: 17,width: 5,length: 2}
             ];
 
             var p1 = new Pacman(1, {x:0, y:0}, 1);
-            var g1 = new Ghost(1, "red", {x:3, y:4}, 1, false);
-            agents = [p1, g1];
+            var g1 = new Ghost(2, "red", {x:11, y:14}, 1, false);
+            var g2 = new Ghost(3, "green", {x:12, y:14}, 1, false);
+            var g3 = new Ghost(4, "blue", {x:11, y:18}, 1, false);
+            agents = [p1, g1, g2, g3];
             pacmans = [p1];
-            ghosts = [g1];
+            ghosts = [g1, g2, g3];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
@@ -339,11 +398,6 @@
             return null;
         }
 
-        function print_pos(agent) {
-            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
-             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
-        }
-
         function updateAgents() {
             agents.forEach(agent => {
                 agent.move();
@@ -384,17 +438,20 @@
 
         function drawGhost(ghost) {
             pos = ghost.getPos();
-            if (gameState[pos.x][pos.y] === 'F') {
+            console.log(pos);
+			if (gameState[pos.x][pos.y] === 'F') {
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
-            }
-            
+            }            
 			else if (gameState[pos.x][pos.y] == 'S') {
-				gameState[pso.x][pos.y] = 'X';
+				gameState[pos.x][pos.y] = 'X';
 			}
-            // else if (gameState[pos.x][pos.y] === 'P') {
-            //     handle_collision(agents[0], ghost);
-            // }
+            else if (gameState[pos.x][pos.y] === 'G' || gameState[pos.x][pos.y] === 'X') {
+                // handle_collision(agents[0], ghost);
+                ghost.pos = copyPos(ghost.lastPos);
+            }
+            pos = ghost.getPos();
+
             ctx.fillStyle = ghost.color;
             ctx.beginPath();
             abs_pos = getAbsPos(pos);
@@ -426,10 +483,11 @@
         }
 
         function undrawAgents() {
-            ctx.fillStyle = "black";
             agents.forEach(agent => {
                 rel_pos = agent.getPos();
                 real_pos = getAbsPos(rel_pos);
+
+                ctx.fillStyle = "black";
                 ctx.fillRect(real_pos.x - gs/2, real_pos.y - gs/2, gs, gs);
 
                 if (agent instanceof Ghost) {
@@ -468,8 +526,8 @@
             ppos = pacman.getPos();
             gpos = ghost.getPos();
             
-            console.log("ppos: " + JSON.stringify(ppos));
-            console.log('gpos: ' + JSON.stringify(gpos));
+            // console.log("ppos: " + JSON.stringify(ppos));
+            // console.log('gpos: ' + JSON.stringify(gpos));
 
             if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
                 return true;
@@ -477,21 +535,21 @@
             plast = pacman.lastPos;
             glast = ghost.lastPos;
 
-            console.log('plastPos: ' + JSON.stringify(plast));
-            console.log('glastPos: ' + JSON.stringify(glast));
+            // console.log('plastPos: ' + JSON.stringify(plast));
+            // console.log('glastPos: ' + JSON.stringify(glast));
 
             if (ppos.x == plast.x && ppos.x == gpos.x && plast.x == glast.x) {
                 // The pacman and the ghost were traveling on the same row
                 if ((plast.y - glast.y) * (ppos.y - gpos.y) < 0) {
                     // Their paths intersect
-                    console.log("collision along row");
+                    // console.log("collision along row");
                     return true;
                 }
             }
             else if (ppos.y == plast.y && ppos.y == gpos.y && plast.y == glast.y) {
                 // traveling on the same column
                 if ((plast.x - glast.x) * (ppos.x - gpos.x) < 0) {
-                    console.log("collision along column");
+                    // console.log("collision along column");
                     return true;
                 }
             }
@@ -520,7 +578,21 @@
             print_pos(ghost);
         }
 
+        function print_pos(agent) {
+            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
+             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
+        }
+
+        function printBoard() {
+            gameState.forEach(row => {
+                console.log(row.join());
+            });
+            console.log();
+        }
+
 		function game() {
+            // printBoard();
+
             undrawAgents();
             updateAgents();
             updateBoard();
