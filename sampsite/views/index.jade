@@ -1,5 +1,11 @@
-extends layout
+doctype html
+html
+	head
+		link(rel="stylesheet" href="/stylesheets/main.css")
+		script(src="http://localhost:3001/socket.io/socket.io.js")
 
-block content
-  h1= title
-  p Welcome to #{title}
+	body
+		canvas(id="gc")
+		script(src="/javascripts/pacman.js")
+	Hi
+

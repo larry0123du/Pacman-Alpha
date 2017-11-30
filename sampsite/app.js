@@ -6,11 +6,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongo = require('mongodb');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+//connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/sampsite');
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(){
+
+});
+
+app.use(session({
+	secret: 'work hard',
+	resave: true,
+	saveUninitialized: false,
+	store: new MongoStore({
+		mongooseConnection: db
+	})
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
