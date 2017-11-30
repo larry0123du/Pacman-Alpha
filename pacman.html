@@ -23,7 +23,7 @@
         var gameState; // matrix representation of the pacman world
         var agents; // a list of all the agents in the pacman world
         var pacmans, ghosts; // list of pacman agents and ghost agents
-
+		var foodCounter; //holds number of food left on the map
         var socket;
 
         SCARED_TIMER = 60; // Set the scared time
@@ -291,10 +291,12 @@
             move() {
                 super.move();
                 if (isFood(this.pos)) {
-                    this.score += 100;
+              		foodCounter--;
+			        this.score += 100;
                     console.log(this.score);
                 }
 				if (isSuperFood(this.pos)) {
+					foodCounter--;
 					this.score += 100;
 					console.log(this.score);
 					agents.forEach(agent => {
@@ -474,7 +476,10 @@
 			ctx.fillStyle = "white";
 			ctx.fillText("Score: " + agents[0].score, canv.width/2, (canv.height-40)); 
 			ctx.fillText("Lives: " + agents[0].lives, canv.width/2, (canv.height-25)); 
-        }
+        	if (foodCounter == 0) {
+				console.log("GAME OVER");
+			}
+		}
         
         // draw foods, called in the init function
         function drawFoods() {
