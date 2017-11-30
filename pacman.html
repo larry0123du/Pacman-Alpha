@@ -59,7 +59,7 @@
             return (!isOutOfBound(pos) && !isWall(pos));
         }
 
-        function findBestMove(pos, op_pos) {
+        function findBestMove(pos, op_pos, isFrightened) {
             // find the best direction to move base on the score returned by minimax
             var maxScore = -1000000;
             var maxMove = null;
@@ -72,11 +72,11 @@
                 if (!isLegalMove(newPos)) continue;
                 if (checkCollision(newPos, op_pos, pos, op_pos)) {return direction;}
 
-                let newScore = minimax(newPos, op_pos, false, 4);
+                let newScore = minimax(newPos, op_pos, false, 4, isFrightened);
                 
-                console.log("maxMove: " + JSON.stringify(maxMove) + " maxScore: " + maxScore);
+                // console.log("maxMove: " + JSON.stringify(maxMove) + " maxScore: " + maxScore);
                 
-                console.log(JSON.stringify(newPos) + " " + newScore);
+                // console.log(JSON.stringify(newPos) + " " + newScore);
                 if (maxMove == null) {
                     maxScore = newScore;
                     maxMove = copyPos(direction);
@@ -88,17 +88,18 @@
                     }
                 }
             }
-            console.log(maxMove);
+            // console.log(maxMove);
             return maxMove;
         }
 
-        function minimax(pos, op_pos, isMax, depth) {
+        function minimax(pos, op_pos, isMax, depth, isFrightened) {
             if (depth == 0) {
-                return evaluate(pos, op_pos);
+                let alpha = isFrightened?-1:1;
+                return alpha*evaluate(pos, op_pos);
             }
             if (isMax) {
                 // Maxer's move
-                console.log("Ghost's turn at depth " + depth);
+                // console.log("Ghost's turn at depth " + depth);
                 var maxScore = -1000000;
                 
                 for (i in dirs) {
@@ -107,23 +108,31 @@
                         x: pos.x + direction.x,
                         y: pos.y + direction.y
                     };
-                    console.log("new ghost pos " + JSON.stringify(newPos));
+                    // console.log("new ghost pos " + JSON.stringify(newPos));
                     if (!isLegalMove(newPos)) {
-                        console.log("illegal position for ghost");
+                        // console.log("illegal position for ghost");
                         continue;
                     }
-                    if (checkCollision(newPos, op_pos, pos, op_pos)) {maxScore = 0;break;}
-                    let newScore = minimax(newPos, op_pos, false, depth - 1);
+                    if (checkCollision(newPos, op_pos, pos, op_pos)) {
+                        if (isFrightened) {
+                            continue;
+                        }
+                        else {
+                            maxScore = 0;
+                            break;
+                        }
+                    }
+                    let newScore = minimax(newPos, op_pos, false, depth - 1, isFrightened);
                     if (maxScore < newScore) {
                         maxScore = newScore;
                     }
                 }
-                console.log("ghost's max score: " + maxScore + " at depth " + depth);
+                // console.log("ghost's max score: " + maxScore + " at depth " + depth);
                 return maxScore;
             }
             else {
                 // Minner's move
-                console.log("Pacman's turn at depth " + depth);
+                // console.log("Pacman's turn at depth " + depth);
                 var minScore = 1000000;
                 var minMove = null;
                 for (i in dirs) {
@@ -132,13 +141,20 @@
                         x: op_pos.x + direction.x,
                         y: op_pos.y + direction.y
                     };
-                    console.log("new pacman pos " + JSON.stringify(newOpPos));
                     if (!isLegalMove(newOpPos)) {
-                        console.log("illegal position for pacman");
+                        // console.log("illegal position for pacman");
                         continue;
                     }
-                    if (checkCollision(pos, newOpPos, pos, op_pos)) {continue;}
-                    let newScore = minimax(pos, newOpPos, true, depth - 1);
+                    if (checkCollision(pos, newOpPos, pos, op_pos)) {
+                        if (isFrightened) {
+                            minScore = 0;
+                            break;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                    let newScore = minimax(pos, newOpPos, true, depth - 1, isFrightened);
                     if (minMove == null) {
                         minScore = newScore;
                         minMove = copyPos(direction);
@@ -150,7 +166,7 @@
                         }
                     }
                 }
-                console.log("pacman's Move: " + JSON.stringify(minMove) + " with Score: " + minScore + " at depth " + depth);
+                // console.log("pacman's Move: " + JSON.stringify(minMove) + " with Score: " + minScore + " at depth " + depth);
                 return minScore;
             }
         }
@@ -252,8 +268,15 @@
             }
 
             move() {
-                this.dir = findBestMove(this.pos, pacmans[0].lastPos);
-                if (this.dir == null) {this.dir = dirs.NONE;}
+                if (Math.random() <= 0.2) {
+                    this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
+                }
+                else {
+                    this.dir = findBestMove(this.pos, pacmans[0].lastPos, this.isScared());
+                    if (this.dir == null) {
+                        this.dir = dirs.NONE;
+                    }
+                }
                 super.move();
             }
         }
