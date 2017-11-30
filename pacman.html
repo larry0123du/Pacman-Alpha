@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
         <link rel="stylesheet" href="css/styles.css">
-        <!-- <script type="text/javascript" href="js/binarySearch.js"></script> -->
+        <script src="buckets.js"></script>
         <script src="/socket.io/socket.io.js"></script>
 	</head>
 	<body>
@@ -39,13 +39,13 @@
 		window.onload=function() {
 			canv=document.getElementById("gc");
 			canv.width = window.innerWidth;
-			canv.height = window.innerHeight;;
+			canv.height = window.innerHeight;
 		
 			ctx=canv.getContext("2d");
             document.addEventListener("keydown",keyPush);
             init();
             // keep running the game
-			setInterval(game,600);
+            setInterval(game,600);
 		}
 
         function copyPos(pos) {
@@ -53,6 +53,111 @@
                 x:pos.x,
                 y:pos.y
             };
+        }
+
+        function isLegalMove(pos) {
+            return (!isOutOfBound(pos) && !isWall(pos));
+        }
+
+        function findBestMove(pos, op_pos) {
+            // find the best direction to move base on the score returned by minimax
+            var maxScore = -1000000;
+            var maxMove = null;
+            for (i in dirs) {
+                let direction = copyPos(dirs[i]);
+                let newPos = {
+                    x: pos.x + direction.x,
+                    y: pos.y + direction.y
+                };
+                if (!isLegalMove(newPos)) continue;
+                if (checkCollision(newPos, op_pos, pos, op_pos)) {return direction;}
+
+                let newScore = minimax(newPos, op_pos, false, 4);
+                
+                console.log("maxMove: " + JSON.stringify(maxMove) + " maxScore: " + maxScore);
+                
+                console.log(JSON.stringify(newPos) + " " + newScore);
+                if (maxMove == null) {
+                    maxScore = newScore;
+                    maxMove = copyPos(direction);
+                }
+                else {
+                    if (maxScore < newScore) {
+                        maxMove = copyPos(direction);
+                        maxScore = newScore;
+                    }
+                }
+            }
+            console.log(maxMove);
+            return maxMove;
+        }
+
+        function minimax(pos, op_pos, isMax, depth) {
+            if (depth == 0) {
+                return evaluate(pos, op_pos);
+            }
+            if (isMax) {
+                // Maxer's move
+                console.log("Ghost's turn at depth " + depth);
+                var maxScore = -1000000;
+                
+                for (i in dirs) {
+                    let direction = copyPos(dirs[i]);
+                    let newPos = {
+                        x: pos.x + direction.x,
+                        y: pos.y + direction.y
+                    };
+                    console.log("new ghost pos " + JSON.stringify(newPos));
+                    if (!isLegalMove(newPos)) {
+                        console.log("illegal position for ghost");
+                        continue;
+                    }
+                    if (checkCollision(newPos, op_pos, pos, op_pos)) {maxScore = 0;break;}
+                    let newScore = minimax(newPos, op_pos, false, depth - 1);
+                    if (maxScore < newScore) {
+                        maxScore = newScore;
+                    }
+                }
+                console.log("ghost's max score: " + maxScore + " at depth " + depth);
+                return maxScore;
+            }
+            else {
+                // Minner's move
+                console.log("Pacman's turn at depth " + depth);
+                var minScore = 1000000;
+                var minMove = null;
+                for (i in dirs) {
+                    let direction = copyPos(dirs[i]);
+                    let newOpPos = {
+                        x: op_pos.x + direction.x,
+                        y: op_pos.y + direction.y
+                    };
+                    console.log("new pacman pos " + JSON.stringify(newOpPos));
+                    if (!isLegalMove(newOpPos)) {
+                        console.log("illegal position for pacman");
+                        continue;
+                    }
+                    if (checkCollision(pos, newOpPos, pos, op_pos)) {continue;}
+                    let newScore = minimax(pos, newOpPos, true, depth - 1);
+                    if (minMove == null) {
+                        minScore = newScore;
+                        minMove = copyPos(direction);
+                    }
+                    else {
+                        if (minScore > newScore) {
+                            minMove = copyPos(direction);
+                            minScore = newScore;
+                        }
+                    }
+                }
+                console.log("pacman's Move: " + JSON.stringify(minMove) + " with Score: " + minScore + " at depth " + depth);
+                return minScore;
+            }
+        }
+
+        function evaluate(pos, op_pos) {
+            // return the negative value of manhattan distance
+            return -1 * (Math.abs(pos.x - op_pos.x) + Math.abs(pos.y - op_pos.y));
         }
 
         class Character {
@@ -74,7 +179,7 @@
 
                 this.pos.x += this.speed * this.dir.x;
                 this.pos.y += this.speed * this.dir.y;
-                if (isOutOfBound(this.pos) || isWall(this.pos)) {
+                if (!isLegalMove(this.pos)) {
                     if (this.speed == 1) {
                         this.pos = copyPos(this.lastPos);
                         this.dir = dirs.NONE;
@@ -100,15 +205,17 @@
         class Ghost extends Character {
             constructor(id, color, pos, speed, frightened) {
                 super(id, color, pos, speed);
-                
-                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
+                this.random = true;
+                this.dir = dirs.NONE;
                 this.frightened = frightened;
                 this.timer = 0;
                 this.initColor = color;
             }
 
             move() {
-                this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
+                if (this.random) {
+                    this.dir = dirs[Object.keys(dirs)[Math.floor(Math.random() * 4)]];
+                }
                 super.move();
             }
 
@@ -135,6 +242,19 @@
                     this.color = this.initColor;
                     this.frightened = false;
                 }
+            }
+        }
+
+        class BasicGhost extends Ghost {
+            constructor(id, color, pos, speed, frightened) {
+                super(id, color, pos, speed, frightened);
+                this.random = false;
+            }
+
+            move() {
+                this.dir = findBestMove(this.pos, pacmans[0].lastPos);
+                if (this.dir == null) {this.dir = dirs.NONE;}
+                super.move();
             }
         }
 
@@ -223,12 +343,13 @@
             ];
 
             var p1 = new Pacman(1, {x:0, y:0}, 1);
-            var g1 = new Ghost(2, "red", {x:3, y:4}, 1, false);
-            var g2 = new Ghost(3, "green", {x:4, y:4}, 1, false);
-            var g3 = new Ghost(4, "blue", {x:3, y:5}, 1, false);
-            agents = [p1, g1, g2, g3];
+            // var g1 = new Ghost(2, "red", {x:3, y:4}, 1, false);
+            var g2 = new BasicGhost(3, "green", {x:4, y:10}, 1, false);
+            // var g2 = new Ghost(3, "green", {x:4, y:4}, 1, false);
+            // var g3 = new Ghost(4, "pink", {x:3, y:5}, 1, false);
+            agents = [p1, g2];
             pacmans = [p1];
-            ghosts = [g1, g2, g3];
+            ghosts = [g2];
             
             roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
             roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
@@ -470,24 +591,20 @@
         }
 
         function check_collision(pacman, ghost) {
-            ppos = pacman.getPos();
-            gpos = ghost.getPos();
-            
-            // console.log("ppos: " + JSON.stringify(ppos));
-            // console.log('gpos: ' + JSON.stringify(gpos));
+            let ppos = pacman.getPos();
+            let gpos = ghost.getPos();
+            let plast = pacman.lastPos;
+            let glast = ghost.lastPos;
+            return checkCollision(ppos, gpos, plast, glast);
+        }
 
+        function checkCollision(ppos, gpos, plast, glast) {
             if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
                 return true;
             }
-            plast = pacman.lastPos;
-            glast = ghost.lastPos;
-
-            // console.log('plastPos: ' + JSON.stringify(plast));
-            // console.log('glastPos: ' + JSON.stringify(glast));
-
             if (ppos.x == plast.x && ppos.x == gpos.x && plast.x == glast.x) {
                 // The pacman and the ghost were traveling on the same row
-                if ((plast.y - glast.y) * (ppos.y - gpos.y) < 0) {
+                if ((plast.y - glast.y) * (ppos.y - gpos.y) <= 0) {
                     // Their paths intersect
                     // console.log("collision along row");
                     return true;
@@ -495,7 +612,7 @@
             }
             else if (ppos.y == plast.y && ppos.y == gpos.y && plast.y == glast.y) {
                 // traveling on the same column
-                if ((plast.x - glast.x) * (ppos.x - gpos.x) < 0) {
+                if ((plast.x - glast.x) * (ppos.x - gpos.x) <= 0) {
                     // console.log("collision along column");
                     return true;
                 }
