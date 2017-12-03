@@ -71,7 +71,9 @@ return next(error);
 })
 
 router.get('/singleplayer', function(req, res, next){
-	return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
+	//return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
+	var path = require('path');
+	return res.sendFile(path.resolve('views/pacman.html'));
 });
 
 router.post('/singlePlayer', function(req, res, next){
@@ -315,6 +317,7 @@ io.on('connection', function(client){
 	client.on('score', function(data){
 		score = data;
 		console.log("Got score:"+data.score);
+		client.emit('redirect', '/profile');
 	});
 });
 
