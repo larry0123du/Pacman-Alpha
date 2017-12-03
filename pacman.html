@@ -23,7 +23,7 @@
         var gameState; // matrix representation of the pacman world
         var agents; // a list of all the agents in the pacman world
         var pacmans, ghosts; // list of pacman agents and ghost agents
-				var foodCounter; //holds number of food left on the map
+				var foodCounter = 0; //holds number of food left on the map
         var socket;
 				var intervalID;
 				var gameTerminate = false;
@@ -291,12 +291,12 @@
             }
 
             move() {
-                super.move();
-                if (isFood(this.pos)) {
-              		foodCounter--;
+            super.move();
+            if (isFood(this.pos)) {
+              foodCounter--;
 			        this.score += 100;
                 //  console.log(this.score);
-                }
+            }
 				if (isSuperFood(this.pos)) {
 					foodCounter--;
 					this.score += 100;
@@ -307,6 +307,7 @@
 						}
 					});
 				}
+				console.log(foodCounter)
             }
 
             decrementLives() {
@@ -451,13 +452,7 @@
                 {x: 23, y: 17,width: 3,length: 2},
                 {x: 27, y: 17,width: 5,length: 2}
             ];
-						for (var i = 0; i < gameState.length; i++) {
-            		for (var j = 0; j < gameState[i].length; j++) {
-                    if (gameState[i][j] === 'F' || gameState[i][j] === 'S') {
-                    		foodCounter++;
-                    }
-								}
-						}
+
             var p1 = new Pacman(1, {x:0, y:0}, 1);
             var g1 = new BasicGhost(2, "red", {x:11, y:15}, 1, false);
             var g2 = new Ghost(3, "pink", {x:12, y:15}, 1, false);
@@ -473,6 +468,14 @@
             drawAgents();
             drawWalls();
             drawFoods();
+
+						for (var i = 0; i < gameState.length; i++) {
+            		for (var j = 0; j < gameState[i].length; j++) {
+                    if (gameState[i][j] === 'F' || gameState[i][j] === 'S') {
+                    		foodCounter++;
+                    }
+								}
+						}
         }
 
         /*
@@ -487,6 +490,7 @@
 			ctx.fillText("Lives: " + agents[0].lives, canv.width/2, (canv.height-20));
       if (foodCounter == 0) {
 					console.log("GAME OVER");
+					console.log(foodCounter)
 					drawScore();
 					var scores = {id:pacman.id, score:pacman.score};
 					socket.emit('scores', scores);
@@ -611,8 +615,8 @@
         }
 
         function drawAgents() {
-					console.log("Draw agent")
-					console.log(drawAgents.caller)
+					//console.log("Draw agent")
+					//console.log(drawAgents.caller)
             pacmans.forEach(pacman => {
                 drawPacman(pacman);
             });
@@ -683,8 +687,8 @@
         }
 
         function undrawAgents() {
-						console.log("undraw agents")
-						console.log(undrawAgents.caller)
+						//console.log("undraw agents")
+						//onsole.log(undrawAgents.caller)
             agents.forEach(agent => {
                 rel_pos = agent.getPos();
                 real_pos = getAbsPos(rel_pos);
@@ -804,7 +808,7 @@
 
 		function game() {
             // printBoard();
-						console.log("print")
+						//console.log("print")
             undrawAgents();
             updateAgents();
             updateBoard();
