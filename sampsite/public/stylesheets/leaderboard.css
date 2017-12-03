@@ -1,0 +1,33 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #cfc100;
+}
+
+table{
+	padding: 30px;
+	font: 20px "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	background-color: #cfc100;
+	font-size: 30px;
+}
+
+th{
+  padding-bottom: 2em;
+
+}
+
+td{
+  padding-bottom: 1em;
+}
+
+img {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+a {
+  color: #00B7FF;
+}

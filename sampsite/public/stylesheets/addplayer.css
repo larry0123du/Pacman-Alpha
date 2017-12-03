@@ -1,0 +1,37 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #cfc100;
+  text-align: center;
+}
+
+h1{
+	padding-bottom: 2em;
+}
+.container {
+	text-align: center;
+	clear: both;
+	font-size: 20px;
+
+}
+
+.container input{
+	width: 30%;
+	text-align: center;
+	clear: both;
+	font-size: 20px;
+	
+}
+
+span {
+
+}
+
+img {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
