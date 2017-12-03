@@ -8,6 +8,7 @@ var io = require('socket.io')(server);
 var score;
 
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	console.log("HERE!");
@@ -69,6 +70,41 @@ return next(error);
   }
 })
 
+router.get('/singleplayer', function(req, res, next){
+	return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
+});
+
+router.post('/singlePlayer', function(req, res, next){
+	console.log("POST singleplayer");
+	User.findById(req.session.userId)
+	.exec(function(error, user){
+			if(error)
+				console.log('Can\'t find user!!');
+
+			console.log("Email:"+user.email+ "\nusername:"+user.username+"\nPW:"+user.password+"\nPWConf:"+user.passwordConf+"\nGP:"+user.gamesPlayed);
+			user.password = user.passwordConf;
+			user.gamesPlayed = user.gamesPlayed + 1;
+			score = 5;
+			if(score > user.highScore)
+			{	
+				user.highScore = score;
+			}
+			else
+				user.highScore = user.highScore;
+
+			console.log("Email:"+user.email+ "\nusername:"+user.username+"\nPW:"+user.password+"\nPWConf:"+user.passwordConf+"\nGP:"+user.gamesPlayed);
+
+			user.save().then(function (err){
+				if(err){
+					console.log('UPDATE ERROR!');
+				}
+
+				res.redirect('/profile');
+			});
+	});
+
+});
+
 // GET route after registering
 router.get('/profile', function (req, res, next) {
   User.findById(req.session.userId)
@@ -81,7 +117,44 @@ router.get('/profile', function (req, res, next) {
           err.status = 400;
           return next(err);
         } else {
-        	res.render('userprofile2');
+
+        	var status;
+        	if(user.gamesPlayed <= 5)
+        		status = "Newbie";
+        	else if(user.gamesPlayed <= 20)
+        		status = "Rookie";
+        	else if(user.gamesPlayed <= 50)
+        		status = "Amateur";
+        	else if(user.gamesPlayed <= 100)
+        		status = "Veteran";
+        	else
+        		status = "Master";
+
+
+
+        	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
+        		var topScore = "empty";
+        		console.log(""+posts[0].highScore+" "+posts[1].highScore+" "+posts[2].highScore+" ");	
+        		if(user.highScore == posts[0].highScore)
+        			topScore = "images/gold.svg";
+        		else if(user.highScore == posts[1].highScore)
+        			topScore = "images/silver.png";
+        		else if(user.highScore == posts[2].highScore)
+        			topScore = "images/bronze.png";
+        		else
+        			topScore = "";
+        		console.log("\n"+topScore);
+
+	        	res.render('userprofile2', {
+        		"user":user,
+        		"medal":topScore,
+        		"status":status
+        	});
+        	});
+
+
+
+
           //return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
         }
       }
