@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
         <link rel="stylesheet" href="css/styles.css">
         <script src="buckets.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
+       <script src="http://localhost:3001/socket.io/socket.io.js"></script> 
 	</head>
 	<body>
 		<canvas id="gc"></canvas>
@@ -328,7 +328,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect('http://localhost:8000');
+            socket = io.connect('http://localhost:3001');
 						gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
 
@@ -491,9 +491,9 @@
       if (foodCounter == 0) {
 					console.log("GAME OVER");
 					console.log(foodCounter)
-					drawScore();
 					var scores = {id:pacman.id, score:pacman.score};
 					socket.emit('scores', scores);
+					drawScore();
 			}
 		}
 
@@ -782,10 +782,10 @@
                 if (!pacman.alive()) {
                     // Game is over
                     console.log("Game Over");
-										gameTerminate = true;
-										drawScore();
+					gameTerminate = true;
                     var scores = {id:pacman.id, score:pacman.score};
                     socket.emit('scores', scores);
+					drawScore();
                 }
                 pacman.reset();
             }
