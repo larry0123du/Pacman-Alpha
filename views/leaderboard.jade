@@ -1,0 +1,24 @@
+html
+	head
+		title
+		link(rel="stylesheet" href="/stylesheets/leaderboard.css")
+
+	body
+
+		img.className#IdName(src="images/boardtop.jpg" alt="Header")
+		img.className#LineBreak(src="images/paceat.gif" alt="NomNom")
+		table(style="width:100%;background-color: #cfc100;")
+			tr(align="center")
+				th No.
+				th NAME
+				th SCORE
+				th TEXT OF FAME
+			each player, i in leaderboard
+				tr(align="center")
+					td #{i+1}
+					td #{player.player}
+					td #{player.score}
+					td #{player.message}
+					
+
+		img.className#IdName(src="images/boardbot.jpg" alt="Footer")
