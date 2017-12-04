@@ -4,7 +4,7 @@ var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
 var io = require('socket.io')(server);
-
+var port = process.env.PORT || 3001;
 var score;
 
 
@@ -324,7 +324,7 @@ io.on('connection', function(client){
 	});
 });
 
-server.listen(3001, function(){
+server.listen(port, function(){
 	console.log('listening on:3001');
 });
 
