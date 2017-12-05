@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
         <link rel="stylesheet" href="css/styles.css">
         <script src="buckets.js"></script>
-       <script src="https://pacrussh.herokuapp.com:3001/socket.io/socket.io.js"></script> 
+       <script src="https://pacrussh.herokuapp.com/socket.io/socket.io.js"></script> 
 	</head>
 	<body>
 		<canvas id="gc"></canvas>
@@ -328,7 +328,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect('https://pacrussh.herokuapp.com:3001');
+            socket = io.connect('https://pacrussh.herokuapp.com');
 						gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
 
