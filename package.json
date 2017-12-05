@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-	"install": "npm install"
+	"ins": "npm install"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
