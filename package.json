@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
 	"ins": "npm install",
-	"sock": "npm install socket.io --save"
+	"sock": "npm install --save --save-exact express socket.io"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
