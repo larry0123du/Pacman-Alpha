@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-	"ins": "npm install"
+	"ins": "npm install",
+	"sock": "npm install socket.io --save"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
