@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Profile
+    link(type = 'text/css', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
+    style.
+    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+
+
+  body(background="/images/bg.jpg")
+    include navbar.html
+    .container
+      .row
+        .col-sm-2.col-lg-3
+          img.img-rounded.img-responsive(src='images/userImage.jpg', alt='')
+        .col-lg-4.col-md-4
+          blockquote
+            font(size="30")
+              p #{user.username}
+            font(size="5.5")
+              small
+                cite(title='Source Title')
+                 |  #{status}  
+          p
+            font(size="3")
+              i.glyphicon.glyphicon-envelope
+              |  #{user.email}
+              br
+              br
+            font(size="5")  
+              i.glyphicon.glyphicon-dashboard
+              |  Games Played: #{user.gamesPlayed}
+              br
+              i.glyphicon.glyphicon-fire
+              |  High Score: #{user.highScore}
+              |  <img src="images/bronze.png" width="25" height="25"></img>

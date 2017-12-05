@@ -1,0 +1,31 @@
+doctype html
+html
+	head
+		title Game Over! Add Your Name!
+		link(rel="stylesheet" href="/stylesheets/addplayer.css")
+
+	body
+
+		img.className#IdName(src="images/gameover.gif" alt="Header")
+		h1(align="center") Game Over! Add Your Name!
+		div(class="container")
+			form#form_add_player(name="addplayer", method="post", action="/addplayer")
+				span Name
+				span &nbsp;
+				br
+				input#input_name(type="text", placeholder="player", name="player")
+				br
+				br
+				span Score
+				span &nbsp;
+				br
+				input#input_score(type="number", placeholder="50", name="score")
+				br
+				br
+				span Text of Glory
+				span &nbsp;
+				br
+				input#input_message(type="text", placeholder="Mom!! Get the camera!!", name="message")
+				br
+				br
+				button#submit_student(type="submit") submit
