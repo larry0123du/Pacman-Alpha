@@ -328,7 +328,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect(window.location.hostname);
+            socket = io();
 						gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
 
