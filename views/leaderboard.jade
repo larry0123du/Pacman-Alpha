@@ -2,23 +2,39 @@ html
 	head
 		title
 		link(rel="stylesheet" href="/stylesheets/leaderboard.css")
-
+		link(type = 'text/css', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
+		style.
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+		script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+		| <link rel="shortcut icon" href="assets/ico/favicon.png">
+		| <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+		| <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+		| <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+		| <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    
 	body
-
 		img.className#IdName(src="images/boardtop.jpg" alt="Header")
 		img.className#LineBreak(src="images/paceat.gif" alt="NomNom")
 		table(style="width:100%;background-color: #cfc100;")
-			tr(align="center")
+			th(align="center")
 				th No.
 				th NAME
 				th SCORE
-				th TEXT OF FAME
+
 			each player, i in leaderboard
 				tr(align="center")
 					td #{i+1}
-					td #{player.player}
-					td #{player.score}
-					td #{player.message}
+					td #{player.username}
+					td #{player.highScore}
+
 					
 
 		img.className#IdName(src="images/boardbot.jpg" alt="Footer")
+		br
+		br
+		div(id="outer")
+			div(id="inner")
+				|	<a href="/profile" class="btn btn-block btn-default"><span class="glyphicon glyphicon-home"></span> Profile</a>
+			div(id="inner2")
+			div(id="inner")		
+				|	<a href="/singleplayer" class="btn btn-block btn-default"><span class="glyphicon glyphicon-refresh"></span> Play Again!</a>

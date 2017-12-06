@@ -5,7 +5,21 @@ body, html {
     padding: 0;
     overflow: hidden;
 }
+button {
+  font-family: "Lucida Console";
+  padding: 0 40px;
+  font-size: 250%;
+  background: black;
+  color: white;
+  border: none;
+  z-index: 1;
+  position:absolute;
+  display:block;
+  top: 50%;
+  left: 45%;
+}
 
 canvas {
+    z-index: 0
     position:absolute;
 }

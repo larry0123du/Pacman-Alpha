@@ -3,8 +3,26 @@ var express = require('express');
 var http = require('http');
 var router = express();
 // var router = express.Router();
+
 var mongodb = require('mongodb');
 var User = require('../models/user');
+// var websock = require('../bin/www');
+
+// console.log("SOCKET:" + websock);
+
+// websock.on('connection', (ws) => {
+//   console.log("Client connected");
+//   // ws.send("hello");
+//   ws.on('message', (msg) => {
+//     score = JSON.parse(msg);
+//     ws.send('got the score');
+//     console.log("SCORE:"+score);
+//   });
+//   ws.on('close', () => {
+//     console.log('Client disconnected');
+//   });
+// });
+
 // var server = require('http').Server(router);
 
 // 2 lines commented out
@@ -102,6 +120,7 @@ router.get('/singleplayer', function(req, res, next){
 	//return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
 	var path = require('path');
 	spid = req.session.userId;
+	console.log("SENT ID:"+spid);
 	res.render('pacman', {"id": spid});
 
 	
@@ -202,6 +221,7 @@ router.get('/profile', function (req, res, next) {
         		console.log("\n"+topScore);
 
 	        	res.render('userprofile2', {
+        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
@@ -220,8 +240,11 @@ router.get('/profile', function (req, res, next) {
 router.post('/findUser', function(req,res, next){
 	console.log("IN SEARCH POST REQUEST");
 	// console.log("REQUEST:"+req.body);
-	console.log("REQUEST:"+req.body.user);
-	User.find({username: "admin6"}).exec(function(error, user) {
+	console.log("REQUEST:"+req.body.user);	
+	var status;		
+	var topScore = "empty";
+	User.find({username: req.body.user}).exec(function(error, user) {
+		console.log("FOUND:"+user);
 		if (error) {
         return next(error);
       } else {
@@ -231,7 +254,7 @@ router.post('/findUser', function(req,res, next){
           return next(err);
         } else {
 
-        	var status;
+
         	if(user.gamesPlayed <= 5)
         		status = "Newbie";
         	else if(user.gamesPlayed <= 20)
@@ -246,7 +269,7 @@ router.post('/findUser', function(req,res, next){
 
 
         	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
-        		var topScore = "empty";
+        		
 //        		console.log(""+posts[0].highScore+" "+posts[1].highScore+" "+posts[2].highScore+" ");	
         		if(user.highScore == posts[0].highScore)
         			topScore = "images/gold.svg";
@@ -258,7 +281,10 @@ router.post('/findUser', function(req,res, next){
         			topScore = "images/nomedal.svg";
         		console.log("\n"+topScore);
 
+
+        	}).then(function(err){
 	        	res.render('userprofile2', {
+        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
@@ -290,35 +316,22 @@ router.get('/logout', function (req, res, next) {
   }
 });
 
-
-router.get('/getleaderboard', function(req, res, next) {
-	var MongoClient = mongodb.MongoClient;
-
-	var url = 'mongodb://eharian:123@ds129966.mlab.com:29966/pacrush';
-
-	MongoClient.connect(url, function(err, db){
+router.get('/getleaderboard', function(req, res, next){
+	User.find({}).sort({'highScore': -1}).limit(10).exec(function(err, posts){
 		if(err){
-			console.log('Unable to connect to the server', err);
-		}else{
-			console.log("Connection Established");
-			var collection = db.collection('players');
-			collection.find({}).sort({score:-1}).limit(10).toArray(function(err, result){
-				if(err){
-					res.send(err);
-				}
-				else if(result.length){
-					res.render('leaderboard', {
-						"leaderboard":result
-					});
-				}
-				else
-				{
-					res.send('No documents found');
-				}
-				db.close();
+			res.send(err);
+			console.log("Failed to get LEADERBOARD");
+		}
+		else if(posts.length){
+			console.log(posts);
+			res.render('leaderboard', {
+				"leaderboard":posts
 			});
 		}
-
+		else
+		{
+			res.send('No documents found');
+		}
 	});
 });
 
