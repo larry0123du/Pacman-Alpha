@@ -1,3 +1,4 @@
+const path = require('path');
 var express = require('express');
 var http = require('http');
 var router = express();
@@ -8,7 +9,7 @@ var User = require('../models/user');
 var server = http.createServer(router);
 var io = require('socket.io').listen(server);
 
-
+router.use(express.static(path.join('public')))
 // io.set('transports', ['xhr-polling']);
 // io.set("polling duration", 10); 
 
