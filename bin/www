@@ -1,5 +1,3 @@
-import { Socket } from 'dgram';
-
 #!/usr/bin/env node
 
 /**
