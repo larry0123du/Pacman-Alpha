@@ -18,7 +18,7 @@
         console.log("DATA:"+local_data);
 
 
-        SCARED_TIMER = 60; // Set the scared time
+        SCARED_TIMER = 30; // Set the scared time
         // define directions
         var dirs = {
             SOUTH: {x:1, y:0},
@@ -276,7 +276,7 @@
         class Pacman extends Character {
             constructor(id, pos, speed) {
                 super(id, "yellow", pos, speed);
-                this.lives = 1;
+                this.lives = 3;
                 this.score = 0;
             }
 
