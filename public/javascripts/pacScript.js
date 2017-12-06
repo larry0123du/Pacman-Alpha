@@ -286,20 +286,12 @@
                 if (isFood(this.pos)) {
                     foodCounter--;
                     this.score += 100;
-<<<<<<< HEAD
                     //console.log(this.score);
                 }
 				if (isSuperFood(this.pos)) {
           foodCounter--;
 					//this.score += 100;
 					console.log(this.score);
-=======
-                    // console.log(this.score);
-                }
-				if (isSuperFood(this.pos)) {
-					this.score += 100;
-					// console.log(this.score);
->>>>>>> cf9e75d4d3f8b871e3a96cdc5c4921ed4a2d5bd1
 					agents.forEach(agent => {
 						if (agent instanceof Ghost) {
 							agent.scare();
@@ -326,8 +318,8 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io();
-            //socket = io('http://localhost:3001');
+            //socket = io();
+            socket = io('http://localhost:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
