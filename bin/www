@@ -47,12 +47,14 @@ wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     score = msg;
     console.log("SCORE:"+msg);
+    // console.log("SCORE:")
+    // console.log("ID:"+msg.userid);
 
     User.find({}).exec(function(err,user){
       console.log("First user:"+user);
     })
 
-    User.findById(msg.userid)
+    User.findById(score.userid)
     .exec(function(error, user){
       console.log("GOT USER:"+user);
 
