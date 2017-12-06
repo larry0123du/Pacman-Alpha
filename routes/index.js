@@ -5,14 +5,15 @@ var User = require('../models/user');
 var server = require('http').Server(router);
 var io = require('socket.io')(server);
 var score;
-
+var Id;
+var spid;
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	console.log("HERE!");
 	var path = require('path');
- return res.sendFile(path.resolve('views/index2.html'));
+ return res.sendFile(path.resolve('views/indexTest.html'));
  //	res.render('index');
  // res.render('index2.html');
   console.log("Done!");
@@ -72,7 +73,10 @@ return next(error);
 router.get('/singleplayer', function(req, res, next){
 	//return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
 	var path = require('path');
-	return res.sendFile(path.resolve('views/pacman.html'));
+	spid = req.session.userId;
+	res.render('pacman', {"id": spid});
+
+	
 });
 
 router.post('/singlePlayer', function(req, res, next){
@@ -143,7 +147,7 @@ router.get('/profile', function (req, res, next) {
         		else if(user.highScore == posts[2].highScore)
         			topScore = "images/bronze.png";
         		else
-        			topScore = "";
+        			topScore = "images/nomedal.svg";
         		console.log("\n"+topScore);
 
 	        	res.render('userprofile2', {
