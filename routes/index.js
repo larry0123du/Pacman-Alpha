@@ -240,7 +240,9 @@ router.get('/profile', function (req, res, next) {
 router.post('/findUser', function(req,res, next){
 	console.log("IN SEARCH POST REQUEST");
 	// console.log("REQUEST:"+req.body);
-	console.log("REQUEST:"+req.body.user);
+	console.log("REQUEST:"+req.body.user);	
+	var status;		
+	var topScore = "empty";
 	User.find({username: req.body.user}).exec(function(error, user) {
 		console.log("FOUND:"+user);
 		if (error) {
@@ -252,7 +254,7 @@ router.post('/findUser', function(req,res, next){
           return next(err);
         } else {
 
-        	var status;
+
         	if(user.gamesPlayed <= 5)
         		status = "Newbie";
         	else if(user.gamesPlayed <= 20)
@@ -267,7 +269,7 @@ router.post('/findUser', function(req,res, next){
 
 
         	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
-        		var topScore = "empty";
+        		
 //        		console.log(""+posts[0].highScore+" "+posts[1].highScore+" "+posts[2].highScore+" ");	
         		if(user.highScore == posts[0].highScore)
         			topScore = "images/gold.svg";
@@ -279,6 +281,8 @@ router.post('/findUser', function(req,res, next){
         			topScore = "images/nomedal.svg";
         		console.log("\n"+topScore);
 
+
+        	}).then(function(err){
 	        	res.render('userprofile2', {
         		"temp":5,
         		"user":user,
