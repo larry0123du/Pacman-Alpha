@@ -317,12 +317,13 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.get('/getleaderboard', function(req, res, next){
-	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
+	User.find({}).sort({'highScore': -1}).limit(10).exec(function(err, posts){
 		if(err){
 			res.send(err);
 			console.log("Failed to get LEADERBOARD");
 		}
 		else if(posts.length){
+			console.log(posts);
 			res.render('leaderboard', {
 				"leaderboard":posts
 			});
