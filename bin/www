@@ -41,10 +41,31 @@ server.on('listening', onListening);
 
 // Use WebSocket here
 const wss = new SocketServer({ server });
+var Clients = [];
 wss.on('connection', (ws) => {
   console.log("Client connected");
   // ws.send("hello");
   ws.on('message', (msg) => {
+    data = JSON.parse(msg);
+    if(data.type == "multiplayer")
+    {
+      var pacId = {
+        "id": data.id,
+        "posx": 0,
+        "posy": 0
+      }
+      Clients.add(pacid);
+      
+
+      ws.send(gameState);
+
+    }
+    else if(data.type == "move")
+    {
+      moveUser(data);
+      ws.send(gameState);
+    }
+
     score = JSON.parse(msg);
     // console.log("MSG:"+msg);
     // console.log("SCORE:"+score);
