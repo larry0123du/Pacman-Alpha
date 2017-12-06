@@ -67,10 +67,15 @@ wss.on('connection', (ws) => {
       user.save().then(function (err){
         if(err){
           console.log('UPDATE ERROR!');
+          console.log("USER:"+user);
         }
 
         // res.redirect('/profile');
       });
+
+      User.findById(score.userid).exec(function(error, user){
+        console.log("UPDATED:"+user);
+      })
   });
 
 
