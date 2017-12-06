@@ -4,6 +4,13 @@ var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
 var io = require('socket.io')(server);
+
+io.configure(function () {
+  io.set('transports', ['xhr-polling']);
+  io.set("polling duration", 10); 
+});
+
+
 var score;
 var Id;
 var spid;
