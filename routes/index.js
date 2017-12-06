@@ -3,8 +3,10 @@ var express = require('express');
 var http = require('http');
 var router = express();
 // var router = express.Router();
+
 var mongodb = require('mongodb');
 var User = require('../models/user');
+var websock = require('../bin/www');
 // var server = require('http').Server(router);
 
 // 2 lines commented out
