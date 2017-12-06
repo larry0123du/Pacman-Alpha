@@ -121,6 +121,29 @@ router.post('/singlePlayer', function(req, res, next){
 
 });
 
+router.post('/endGame', function(req, res, next){
+	console.log("POST SinglePlayer");
+	User.findById(req.session.userId)
+	.exec(function(error, user){
+		if(error)
+			console.log("Can\'t find user!");
+
+		console.log("Email:"+user.email+"\nusername:"+user.username);
+		user.password = user.passwordConf;
+		user.gamesPlayed = user.gamesPlayed + 1;
+		if(req.body.score > user.highScore)
+			user.highScore = req.body.score;
+
+		user.save().then(function (err){
+			if(err){
+				console.log('Mongoose Error maybe');
+			}
+
+			res.redirect('/profile');
+		});
+	});
+});
+
 // GET route after registering
 router.get('/profile', function (req, res, next) {
   User.findById(req.session.userId)
