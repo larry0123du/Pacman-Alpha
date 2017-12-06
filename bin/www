@@ -1,3 +1,5 @@
+import { Socket } from 'dgram';
+
 #!/usr/bin/env node
 
 /**
@@ -7,6 +9,9 @@
 var app = require('../app');
 var debug = require('debug')('sampsite:server');
 var http = require('http');
+
+// define SocketServer
+const SocketServer = require('ws').Server;
 /**
  * Get port from environment and store in Express.
  */
@@ -30,8 +35,19 @@ var http = require('http');
 
 // The 3 lines below commented out
 server.listen(port);
+
 server.on('error', onError);
 server.on('listening', onListening);
+
+// Use WebSocket here
+const wss = new SocketServer({ server });
+wss.on('connection', (ws) => {
+  console.log("Client connected");
+  ws.send("hello");
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
 
 /**
  * Normalize a port into a number, string, or false.
