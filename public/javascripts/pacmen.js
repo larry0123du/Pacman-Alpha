@@ -19,9 +19,12 @@ ws.onopen = function(event) {
    canv=document.getElementById("gc");
    canv.width = window.innerWidth;
    canv.height = window.innerHeight;
+   ctx=canv.getContext("2d");
+   document.addEventListener("keydown",keyPush);
    drawBoard();
+
  }
-    
+
 function drawBoard(gameState) {
     gs = Math.min((canv.width/38), (canv.height/30));
     rad = 0.5*gs;
@@ -103,4 +106,24 @@ function isSuperFood(pos) {
 
 function isPacMan(pos) {
   return gameState[pos.x][pos.y] == 'P';
+}
+
+function keyPush(evt) {
+  var msg = {
+    type: 'move',
+    id: local_data
+  };
+switch(evt.keyCode) {
+case 37:
+      msg["action"] = "WEST"
+  break;
+case 38:
+      msg["action"] = "NORTH"
+  break;
+case 39:
+      msg["action"] = "EAST"
+  break;
+case 40:
+      msg["action"] = "SOUTH"
+  break;
 }

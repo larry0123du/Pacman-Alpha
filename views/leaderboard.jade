@@ -11,15 +11,15 @@ html
 		| <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
 		| <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
 		| <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
-    
+
 	body
 		img.className#IdName(src="images/boardtop.jpg" alt="Header")
 		img.className#LineBreak(src="images/paceat.gif" alt="NomNom")
 		table(style="width:100%;background-color: #cfc100;")
 			tr(align="center")
-				th(text align="internal center") No.
-				th(text align="internal center") NAME
-				th(text align="internal center") SCORE
+				th(text align="center") No.
+				th(text align="center") NAME
+				th(text align="center") SCORE
 
 			each player, i in leaderboard
 				tr(align="center")
@@ -27,7 +27,7 @@ html
 					td #{player.username}
 					td #{player.highScore}
 
-					
+
 
 		img.className#IdName(src="images/boardbot.jpg" alt="Footer")
 		br
@@ -36,5 +36,5 @@ html
 			div(id="inner")
 				|	<a href="/profile" class="btn btn-block btn-default"><span class="glyphicon glyphicon-home"></span> Profile</a>
 			div(id="inner2")
-			div(id="inner")		
+			div(id="inner")
 				|	<a href="/singleplayer" class="btn btn-block btn-default"><span class="glyphicon glyphicon-refresh"></span> Play Again!</a>
