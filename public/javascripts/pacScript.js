@@ -20,6 +20,14 @@
         var HOST = location.origin.replace(/^http/, 'ws');
         var ws = new WebSocket(HOST);
 
+        ws.onopen = function(event) {
+            var msg = {
+                type: 'single player',
+                id: local_data
+            };
+            ws.send(JSON.stringify(msg));
+        }
+
         var intervalID;
         console.log("DATA:"+local_data);
 
