@@ -12,6 +12,8 @@ var User = require('../models/user');
 
 // define SocketServer
 const SocketServer = require('ws').Server;
+
+var clientList =[];
 /**
  * Get port from environment and store in Express.
  */
