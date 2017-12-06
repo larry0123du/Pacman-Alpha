@@ -8,20 +8,14 @@ var User = require('../models/user');
 var server = require('http').Server(router);
 
 // var server = http.createServer(router);
-// var io = require('socket.io').listen(server);
-const socketIO = require('socket.io');
 
-router.use('/', express.static(__dirname));
-// io.set('transports', ['xhr-polling']);
-// io.set("polling duration", 10); 
-
+// router.use('/', express.static(__dirname));
 
 var score;
 var Id;
 var spid;
 
 var port = 3000; //process.env.PORT || 8080;
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -359,16 +353,16 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-const io = socketIO(server);
+// const io = socketIO(server);
 
-io.on('connection', function(client){
-	console.log('Client connected...');
-	client.on('score', function(data){
-		score = data;
-		console.log("Got score:"+data.score);
-		client.emit('redirect', '/profile');
-	});
-});
+// io.on('connection', function(client){
+// 	console.log('Client connected...');
+// 	client.on('score', function(data){
+// 		score = data;
+// 		console.log("Got score:"+data.score);
+// 		client.emit('redirect', '/profile');
+// 	});
+// });
 
 
 
