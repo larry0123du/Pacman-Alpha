@@ -241,6 +241,7 @@ router.post('/findUser', function(req,res, next){
 	// console.log("REQUEST:"+req.body);
 	console.log("REQUEST:"+req.body.user);
 	User.find({username: req.body.user}).exec(function(error, user) {
+		console.log("FOUND:"+user);
 		if (error) {
         return next(error);
       } else {

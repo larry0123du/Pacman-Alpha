@@ -46,16 +46,24 @@ wss.on('connection', (ws) => {
   // ws.send("hello");
   ws.on('message', (msg) => {
     score = JSON.parse(msg);
+    console.log("MSG:"+msg);
+    console.log("SCORE:"+score);
+    console.log("VALUE:"+score.userid);
+    console.log("ID:"+msg.userid);
 
+    User.find({}).exec(function(err,user){
+      console.log("First user:"+user);
+    })
 
     User.findById(score.userid)
     .exec(function(error, user){
       console.log("GOT USER:"+user);
 
+      console.log("Email:"+user.email+ "\nusername:"+user.username+"\nPW:"+user.password+"\nPWConf:"+user.passwordConf+"\nGP:"+user.gamesPlayed);
       user.password = user.passwordConf;
       user.gamesPlayed = user.gamesPlayed + 1;
-
-      if(score.score > user.highScore)
+      score = 69;
+      if(score > user.highScore)
       { 
         user.highScore = score;
       }
@@ -67,15 +75,10 @@ wss.on('connection', (ws) => {
       user.save().then(function (err){
         if(err){
           console.log('UPDATE ERROR!');
-          console.log("USER:"+user);
         }
 
         // res.redirect('/profile');
       });
-
-      User.findById(score.userid).exec(function(error, user){
-        console.log("UPDATED:"+user);
-      })
   });
 
 
