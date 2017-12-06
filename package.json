@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-	"ins": "npm install",
-	"sock": "npm install --save --save-exact express socket.io"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",

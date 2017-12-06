@@ -3,7 +3,7 @@ var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
 
 
 // io.set('transports', ['xhr-polling']);
@@ -326,14 +326,14 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-io.on('connection', function(client){
-	console.log('Client connected...');
-	client.on('score', function(data){
-		score = data;
-		console.log("Got score:"+data.score);
-		client.emit('redirect', '/profile');
-	});
-});
+// io.on('connection', function(client){
+// 	console.log('Client connected...');
+// 	client.on('score', function(data){
+// 		score = data;
+// 		console.log("Got score:"+data.score);
+// 		client.emit('redirect', '/profile');
+// 	});
+// });
 
 server.listen(port, function(){
 	console.log('listening on: ' + port);
