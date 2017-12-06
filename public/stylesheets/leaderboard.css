@@ -1,33 +1,50 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #cfc100;
+  padding: 50px !important;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif !important;
+  background-color: #cfc100 !important;
 }
 
 table{
 	padding: 30px;
-	font: 20px "Palatino Linotype", "Book Antiqua", Palatino, serif;
-	background-color: #cfc100;
-	font-size: 30px;
+	font: 20px "Palatino Linotype", "Book Antiqua", Palatino, serif !important;
+	background-color: #cfc100 !important;
+	font-size: 30px !important;
 }
 
 th{
-  padding-bottom: 2em;
+  padding-bottom: 2em !important;
 
 }
 
 td{
-  padding-bottom: 1em;
+  padding-bottom: 1em !important;
 }
 
 img {
-    padding: 0;
-    display: block;
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 100%;
+    padding: 0 !important;
+    display: block !important;
+    margin: 0 auto !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
 }
 
 a {
-  color: #00B7FF;
+  color: #00B7FF !important;
+}
+
+#outer
+{
+    width:100% !important;
+    text-align: center;
+}
+#inner
+{
+  width:40% !important;
+    display: inline-block !important;
+}
+
+#inner2
+{
+  width:20%;
+  display: inline-block !important;
 }
