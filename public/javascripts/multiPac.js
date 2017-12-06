@@ -17,7 +17,7 @@ exports.Pacman = class {
         this.color = color;
         this.pos = pos;
         this.lastPos = null;
-        this.dir = dirs.NONE;
+        this.dir = exports.dirs.NONE;
         this.alive = true;
     }
 
@@ -30,7 +30,7 @@ exports.Pacman = class {
         this.pos.y += this.speed * this.dir.y;
         if (!exports.isLegalMove(this.pos)) {
             this.pos = exports.copyPos(this.lastPos);
-            this.dir = dirs.NONE;
+            this.dir = exports.dirs.NONE;
             return;
         }
     }
@@ -109,7 +109,7 @@ exports.checkCollision = function checkCollision(ppos, gpos, plast, glast) {
 }
 
 
-/* 
+/*
  * Debugging functions
  */
 
