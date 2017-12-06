@@ -316,6 +316,12 @@ router.get('/logout', function (req, res, next) {
   }
 });
 
+router.get('/multiplayer', function(req, res, next){
+	spid = req.session.userId;
+	console.log("SENT ID:"+spid);
+	res.render('pacmen', {"id": req.session.userId});
+})
+
 router.get('/getleaderboard', function(req, res, next){
 	User.find({}).sort({'highScore': -1}).limit(10).exec(function(err, posts){
 		if(err){
