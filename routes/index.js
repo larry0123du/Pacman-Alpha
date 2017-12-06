@@ -10,18 +10,18 @@ var websock = require('../bin/www');
 
 console.log("SOCKET:" + websock);
 
-websock.on('connection', (ws) => {
-  console.log("Client connected");
-  // ws.send("hello");
-  ws.on('message', (msg) => {
-    score = JSON.parse(msg);
-    ws.send('got the score');
-    console.log("SCORE:"+score);
-  });
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
+// websock.on('connection', (ws) => {
+//   console.log("Client connected");
+//   // ws.send("hello");
+//   ws.on('message', (msg) => {
+//     score = JSON.parse(msg);
+//     ws.send('got the score');
+//     console.log("SCORE:"+score);
+//   });
+//   ws.on('close', () => {
+//     console.log('Client disconnected');
+//   });
+// });
 
 // var server = require('http').Server(router);
 
