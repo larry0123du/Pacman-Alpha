@@ -46,10 +46,10 @@ wss.on('connection', (ws) => {
   // ws.send("hello");
   ws.on('message', (msg) => {
     score = JSON.parse(msg);
-    console.log("MSG:"+msg);
-    console.log("SCORE:"+score);
-    console.log("VALUE:"+score.userid);
-    console.log("ID:"+msg.userid);
+    // console.log("MSG:"+msg);
+    // console.log("SCORE:"+score);
+    // console.log("VALUE:"+score.userid);
+    // console.log("ID:"+msg.userid);
 
 
 
@@ -59,10 +59,10 @@ wss.on('connection', (ws) => {
 
       user.password = user.passwordConf;
       user.gamesPlayed = user.gamesPlayed + 1;
-      score = 70;
-      if(score > user.highScore)
+      // score = 70;
+      if(score.score > user.highScore)
       { 
-        user.highScore = score;
+        user.highScore = score.score;
       }
       else
         user.highScore = user.highScore;

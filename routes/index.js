@@ -221,6 +221,7 @@ router.get('/profile', function (req, res, next) {
         		console.log("\n"+topScore);
 
 	        	res.render('userprofile2', {
+        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
@@ -279,6 +280,7 @@ router.post('/findUser', function(req,res, next){
         		console.log("\n"+topScore);
 
 	        	res.render('userprofile2', {
+        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
