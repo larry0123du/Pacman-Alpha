@@ -57,6 +57,7 @@ wss.on('connection', (ws) => {
     data = JSON.parse(msg);
     if(data.type == "multi player")
     {
+      console.log("MULTIPLAYER:"+msg);
       var pos = {
         'x': Math.floor(Math.random()*20),
         'y': Math.floor(Math.random()*33)
