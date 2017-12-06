@@ -20,6 +20,12 @@
         var intervalID;
         console.log("DATA:"+local_data);
 
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/endGame", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            score: 10
+        }));
 
         SCARED_TIMER = 30; // Set the scared time
         // define directions
@@ -777,12 +783,7 @@
                     var scores = {userid: local_data, id:pacman.id, score:pacman.score};
                     socket.emit('score', scores);
 
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "/endGame", true);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.send(JSON.stringify({
-                        score:pacman.score
-                    }));
+
 
                     drawScore();
                     window.location.href = '/profile';
