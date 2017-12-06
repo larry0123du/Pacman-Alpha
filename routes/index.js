@@ -6,8 +6,10 @@ var router = express();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
+
 // var server = http.createServer(router);
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
+const socketIO = require('socket.io');
 
 router.use('/', express.static(__dirname));
 // io.set('transports', ['xhr-polling']);
@@ -31,7 +33,6 @@ router.get('/', function(req, res, next) {
   console.log("Done!");
 //  res.redirect('newplayer');
 });
-
 server.listen(port, function(){
 	console.log('listening on: ' + port);
 });
@@ -358,7 +359,9 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-io.sockets.on('connection', function(client){
+const io = socketIO(server);
+
+io.on('connection', function(client){
 	console.log('Client connected...');
 	client.on('score', function(data){
 		score = data;
