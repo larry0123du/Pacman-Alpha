@@ -284,11 +284,11 @@
                 super.move();
                 if (isFood(this.pos)) {
                     this.score += 100;
-                    console.log(this.score);
+                    // console.log(this.score);
                 }
 				if (isSuperFood(this.pos)) {
 					this.score += 100;
-					console.log(this.score);
+					// console.log(this.score);
 					agents.forEach(agent => {
 						if (agent instanceof Ghost) {
 							agent.scare();
@@ -614,7 +614,7 @@
 
         function drawGhost(ghost) {
             pos = ghost.getPos();
-            console.log(pos);
+            // console.log(pos);
 			if (gameState[pos.x][pos.y] === 'F') {
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
@@ -751,7 +751,7 @@
         }
 
         function print_pos(agent) {
-            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
+            // console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
              + ": x - " + agent.pos.x + " y - " + agent.pos.y);
         }
 
@@ -795,6 +795,6 @@
 			}
 		}
 
-        socket.on('ID', function(Id){
-            console.log("ID:"+Id);
-        });
+        // socket.on('ID', function(Id){
+        //     console.log("ID:"+Id);
+        // });
