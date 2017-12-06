@@ -16,6 +16,8 @@
         var gameTerminate = false;
         var socket;
         var socket2;
+
+        var intervalID;
         console.log("DATA:"+local_data);
 
 
@@ -38,7 +40,7 @@
             document.addEventListener("keydown",keyPush);
             init();
             // keep running the game
-            setInterval(game,600);
+            intervalID = setInterval(game,600);
 		}
 
         function copyPos(pos) {
@@ -319,7 +321,7 @@
          */
         function init() {
             //socket = io();
-            socket = io('http://localhost:3001');
+            socket = io('https://pacrussh.herokuapp.com:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
             rad = 0.5*gs;
