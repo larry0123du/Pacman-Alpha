@@ -46,9 +46,10 @@ wss.on('connection', (ws) => {
   // ws.send("hello");
   ws.on('message', (msg) => {
     score = msg;
-    console.log("SCORE:"+msg);
-    // console.log("SCORE:")
-    // console.log("ID:"+msg.userid);
+    console.log("MSG:"+msg);
+    console.log("SCORE:"+score);
+    console.log("VALUE:"+score.userid);
+    console.log("ID:"+msg.userid);
 
     User.find({}).exec(function(err,user){
       console.log("First user:"+user);
