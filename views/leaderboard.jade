@@ -16,10 +16,10 @@ html
 		img.className#IdName(src="images/boardtop.jpg" alt="Header")
 		img.className#LineBreak(src="images/paceat.gif" alt="NomNom")
 		table(style="width:100%;background-color: #cfc100;")
-			th(align="center")
-				th No.
-				th NAME
-				th SCORE
+			tr(align="center")
+				th(text align="internal center") No.
+				th(text align="internal center") NAME
+				th(text align="internal center") SCORE
 
 			each player, i in leaderboard
 				tr(align="center")
