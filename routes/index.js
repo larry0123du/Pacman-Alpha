@@ -3,11 +3,11 @@ var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
 
 
-io.set('transports', ['xhr-polling']);
-io.set("polling duration", 10); 
+// io.set('transports', ['xhr-polling']);
+// io.set("polling duration", 10); 
 
 
 var score;
