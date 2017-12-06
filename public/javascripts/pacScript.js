@@ -798,7 +798,7 @@
 
 
                     drawScore();
-                    window.location.href = '/profile';
+                    // window.location.href = '/profile';
                 }
                 pacman.reset();
             }
