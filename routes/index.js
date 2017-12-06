@@ -5,21 +5,16 @@ var router = express();
 // var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
-// var server = http.createServer(router);
-var io = require('socket.io').listen(server);
-
-router.use('/', express.static(__dirname));
-// io.set('transports', ['xhr-polling']);
-// io.set("polling duration", 10); 
-
+// var server = require('http').Server(router);
+var server = http.createServer(router);
+const SocketServer = require('ws').Server;
+// router.use('/', express.static(__dirname));
 
 var score;
 var Id;
 var spid;
 
-var port = 3000; //process.env.PORT || 8080;
-
+var port = process.env.PORT || 8000;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -34,6 +29,16 @@ router.get('/', function(req, res, next) {
 
 server.listen(port, function(){
 	console.log('listening on: ' + port);
+});
+
+const wss = new SocketServer({ server: server });
+wss.on('connection', (ws) => {
+	console.log('Client connected');
+	// wss.clients.forEach((client) => {
+	// 	client.send('hello');
+	// });
+	ws.send('hello');
+	ws.on('close', () => console.log('connection disconnected'));
 });
 
 
@@ -416,14 +421,16 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-io.sockets.on('connection', function(client){
-	console.log('Client connected...');
-	client.on('score', function(data){
-		score = data;
-		console.log("Got score:"+data.score);
-		client.emit('redirect', '/profile');
-	});
-});
+// const io = socketIO(server);
+
+// io.on('connection', function(client){
+// 	console.log('Client connected...');
+// 	client.on('score', function(data){
+// 		score = data;
+// 		console.log("Got score:"+data.score);
+// 		client.emit('redirect', '/profile');
+// 	});
+// });
 
 
 
