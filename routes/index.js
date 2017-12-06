@@ -5,11 +5,11 @@ var router = express();
 // var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-// var server = require('http').Server(router);
-var server = http.createServer(router);
+var server = require('http').Server(router);
+// var server = http.createServer(router);
 var io = require('socket.io').listen(server);
 
-router.use(express.static(path.join('public')))
+router.use('/', express.static(__dirname));
 // io.set('transports', ['xhr-polling']);
 // io.set("polling duration", 10); 
 
@@ -18,7 +18,7 @@ var score;
 var Id;
 var spid;
 
-var port = 3000; //process.env.PORT || 8080;
+var port = process.env.PORT || 3000; //process.env.PORT || 8080;
 
 
 /* GET home page. */
@@ -31,6 +31,11 @@ router.get('/', function(req, res, next) {
   console.log("Done!");
 //  res.redirect('newplayer');
 });
+
+server.listen(port, function(){
+	console.log('listening on: ' + port);
+});
+
 
 router.post('/', function (req, res, next) {
   // confirm that user typed same password twice
@@ -353,17 +358,13 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-io.on('connection', function(client){
+io.sockets.on('connection', function(client){
 	console.log('Client connected...');
 	client.on('score', function(data){
 		score = data;
 		console.log("Got score:"+data.score);
 		client.emit('redirect', '/profile');
 	});
-});
-
-server.listen(port, function(){
-	console.log('listening on: ' + port);
 });
 
 
