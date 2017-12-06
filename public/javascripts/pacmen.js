@@ -114,16 +114,17 @@ function keyPush(evt) {
     id: local_data
   };
 switch(evt.keyCode) {
-case 37:
-      msg["action"] = "WEST"
-  break;
-case 38:
-      msg["action"] = "NORTH"
-  break;
-case 39:
-      msg["action"] = "EAST"
-  break;
-case 40:
-      msg["action"] = "SOUTH"
-  break;
+  case 37:
+        msg["action"] = "WEST"
+    break;
+  case 38:
+        msg["action"] = "NORTH"
+    break;
+  case 39:
+        msg["action"] = "EAST"
+    break;
+  case 40:
+        msg["action"] = "SOUTH"
+    break;
+  }
 }
