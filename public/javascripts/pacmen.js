@@ -5,6 +5,13 @@ var border; // borders of the pacman world
 /*
  * Draw the board
  */
+ window.onload=function() {
+   canv=document.getElementById("gc");
+   canv.width = window.innerWidth;
+   canv.height = window.innerHeight;
+   drawBoard();
+ }
+    
 function drawBoard(gameState) {
     gs = Math.min((canv.width/38), (canv.height/30));
     rad = 0.5*gs;
