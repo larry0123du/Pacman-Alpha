@@ -6,10 +6,8 @@ var router = express();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
-
 // var server = http.createServer(router);
-// var io = require('socket.io').listen(server);
-const socketIO = require('socket.io');
+var io = require('socket.io').listen(server);
 
 router.use('/', express.static(__dirname));
 // io.set('transports', ['xhr-polling']);
@@ -33,6 +31,7 @@ router.get('/', function(req, res, next) {
   console.log("Done!");
 //  res.redirect('newplayer');
 });
+
 server.listen(port, function(){
 	console.log('listening on: ' + port);
 });
@@ -207,13 +206,68 @@ router.get('/profile', function (req, res, next) {
     });
 });
 
+router.post('/findUser', function(req,res, next){
+	User.findOne({username: req.body.user}, function(err, obj) {
+		if (error) {
+        return next(error);
+      } else {
+        if (user === null) {
+          var err = new Error('Not authorized! Go back!');
+          err.status = 400;
+          return next(err);
+        } else {
+
+        	var status;
+        	if(user.gamesPlayed <= 5)
+        		status = "Newbie";
+        	else if(user.gamesPlayed <= 20)
+        		status = "Rookie";
+        	else if(user.gamesPlayed <= 50)
+        		status = "Amateur";
+        	else if(user.gamesPlayed <= 100)
+        		status = "Veteran";
+        	else
+        		status = "Master";
+
+
+
+        	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
+        		var topScore = "empty";
+//        		console.log(""+posts[0].highScore+" "+posts[1].highScore+" "+posts[2].highScore+" ");	
+        		if(user.highScore == posts[0].highScore)
+        			topScore = "images/gold.svg";
+        		else if(user.highScore == posts[1].highScore)
+        			topScore = "images/silver.png";
+        		else if(user.highScore == posts[2].highScore)
+        			topScore = "images/bronze.png";
+        		else
+        			topScore = "images/nomedal.svg";
+        		console.log("\n"+topScore);
+
+	        	res.render('userprofile2', {
+        		"user":user,
+        		"medal":topScore,
+        		"status":status
+        	});
+        	});
+
+
+
+
+          //return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+        }
+      
+      }
+	});
+ });
+
 
 // GET for logout logout
 router.get('/logout', function (req, res, next) {
   if (req.session) {
     // delete session object
     req.session.destroy(function (err) {
-      if (err) {
+      if (err) { 
         return next(err);
       } else {
         return res.redirect('/');
@@ -359,9 +413,7 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-const io = socketIO(server);
-
-io.on('connection', function(client){
+io.sockets.on('connection', function(client){
 	console.log('Client connected...');
 	client.on('score', function(data){
 		score = data;
