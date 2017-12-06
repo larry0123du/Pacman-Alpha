@@ -5,6 +5,10 @@ var router = express();
 // var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
+var server = require('http').Server(router);
+
+// var server = http.createServer(router);
+// var io = require('socket.io').listen(server);
 const socketIO = require('socket.io');
 
 router.use('/', express.static(__dirname));
@@ -29,8 +33,7 @@ router.get('/', function(req, res, next) {
   console.log("Done!");
 //  res.redirect('newplayer');
 });
-
-router.listen(port, function(){
+server.listen(port, function(){
 	console.log('listening on: ' + port);
 });
 
@@ -356,7 +359,7 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
-const io = socketIO(router);
+const io = socketIO(server);
 
 io.on('connection', function(client){
 	console.log('Client connected...');
