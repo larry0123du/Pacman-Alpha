@@ -120,6 +120,7 @@ router.get('/singleplayer', function(req, res, next){
 	//return res.send('<form action="/singleplayer" method="post">							<input type="submit" value="LOGIN NOW">				</form>')
 	var path = require('path');
 	spid = req.session.userId;
+	console.log("SENT ID:"+spid);
 	res.render('pacman', {"id": spid});
 
 	

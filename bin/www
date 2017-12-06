@@ -48,7 +48,7 @@ wss.on('connection', (ws) => {
     score = msg;
     console.log("SCORE:"+msg);
 
-    User.find({}).limit(1).exec(function(err,user){
+    User.find({}).exec(function(err,user){
       console.log("First user:"+user);
     })
 
