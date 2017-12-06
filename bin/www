@@ -53,8 +53,9 @@ wss.on('connection', (ws) => {
   });
 });
 
-var websock = wss;
-module.exports = websock;
+
+// var websock = wss;
+// module.exports = websock;
 
 /**
  * Normalize a port into a number, string, or false.

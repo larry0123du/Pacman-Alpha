@@ -6,7 +6,7 @@ var router = express();
 
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var websock = require('../bin/www');
+// var websock = require('../bin/www');
 
 // console.log("SOCKET:" + websock);
 
