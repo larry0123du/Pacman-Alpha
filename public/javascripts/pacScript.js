@@ -494,6 +494,8 @@
           gameTerminate = true;
           var scores = {userid: local_data, id:pacman.id, score:pacman.score};
         //   socket.emit('score', scores);
+        ws.send(JSON.stringify(scores));
+        
           drawScore();
           window.location.href = '/profile';
 			}
@@ -781,15 +783,17 @@
                     // Game is over
                     console.log("Game Over");
                     gameTerminate = true;
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "/endGame", true);
-                        xhr.setRequestHeader('Content-Type', 'application/json');
-                        xhr.send(JSON.stringify({
-                            score: pacman.score
-                        }));
+                        // var xhr = new XMLHttpRequest();
+                        // xhr.open("POST", "/endGame", true);
+                        // xhr.setRequestHeader('Content-Type', 'application/json');
+                        // xhr.send(JSON.stringify({
+                        //     score: pacman.score
+                        // }));
                         
                     var scores = {userid: local_data, id:pacman.id, score:pacman.score};
                     // socket.emit('score', scores);
+                    ws.send(JSON.stringify(scores));
+                    
 
 
 
