@@ -5,8 +5,8 @@ var router = express();
 // var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
-// var server = http.createServer(router);
+// var server = require('http').Server(router);
+var server = http.createServer(router);
 const SocketServer = require('ws').Server;
 // router.use('/', express.static(__dirname));
 
@@ -14,7 +14,7 @@ var score;
 var Id;
 var spid;
 
-var port = 3000; //process.env.PORT || 8080;
+var port = process.env.PORT || 8000;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,13 +31,14 @@ server.listen(port, function(){
 	console.log('listening on: ' + port);
 });
 
-const wss = new SocketServer({ server });
+const wss = new SocketServer({ server: server });
 wss.on('connection', (ws) => {
 	console.log('Client connected');
-	wss.clients.forEach((client) => {
-		client.send('hello');
-	});
-	wss.on('close', () => console.log('connection disconnected'));
+	// wss.clients.forEach((client) => {
+	// 	client.send('hello');
+	// });
+	ws.send('hello');
+	ws.on('close', () => console.log('connection disconnected'));
 });
 
 
