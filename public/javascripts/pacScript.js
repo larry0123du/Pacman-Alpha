@@ -752,7 +752,7 @@
 
         function print_pos(agent) {
             // console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
-             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
+            //  + ": x - " + agent.pos.x + " y - " + agent.pos.y);
         }
 
         function printBoard() {
