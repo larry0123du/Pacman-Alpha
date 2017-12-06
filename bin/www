@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('sampsite:server');
 var http = require('http');
-var User = require('../models/User');
+// var User = require('../models/User');
 // var User = 
 
 // define SocketServer
