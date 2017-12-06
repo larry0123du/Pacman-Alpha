@@ -45,7 +45,7 @@ wss.on('connection', (ws) => {
   console.log("Client connected");
   // ws.send("hello");
   ws.on('message', (msg) => {
-    score = msg;
+    score = JSON.parse(msg);
     console.log("MSG:"+msg);
     console.log("SCORE:"+score);
     console.log("VALUE:"+score.userid);
