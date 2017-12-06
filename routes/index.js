@@ -1,8 +1,11 @@
 var express = require('express');
-var router = express.Router();
+var http = require('http');
+var router = express();
+// var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
+// var server = require('http').Server(router);
+var server = http.createServer(router);
 var io = require('socket.io').listen(server);
 
 
