@@ -7,6 +7,20 @@ var router = express();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 var websock = require('../bin/www');
+
+websock.on('connection', (ws) => {
+  console.log("Client connected");
+  // ws.send("hello");
+  ws.on('message', (msg) => {
+    score = JSON.parse(msg);
+    ws.send('got the score');
+    console.log("SCORE:"+score);
+  });
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+
 // var server = require('http').Server(router);
 
 // 2 lines commented out
