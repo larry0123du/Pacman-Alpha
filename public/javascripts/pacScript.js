@@ -495,9 +495,9 @@
           var scores = {userid: local_data, id:pacman.id, score:pacman.score};
         //   socket.emit('score', scores);
         ws.send(JSON.stringify(scores));
-        
+
           drawScore();
-          window.location.href = '/profile';
+          //window.location.href = '/profile';
 			}
     }
 
@@ -737,7 +737,15 @@
 					ctx.font = "75px Lucida Console";
 					ctx.fillStyle = "white";
 					ctx.fillText("Game Over", (canv.width/2)-200, (canv.height/2)-75);
+          ctx.font = "70px Lucida Console";
 					ctx.fillText("Score: " + agents[0].score, (canv.width/2)-200, (canv.height/2));
+          //create button
+					var button = document.getElementById("button");
+					button.innerHTML = "Ok";
+					//create event handler
+					button.addEventListener ("click", function() {
+					  window.location.href = '/profile';
+					});
 				}
 
         function check_collision(pacman, ghost) {
@@ -789,11 +797,11 @@
                         // xhr.send(JSON.stringify({
                         //     score: pacman.score
                         // }));
-                        
+
                     var scores = {userid: local_data, id:pacman.id, score:pacman.score};
                     // socket.emit('score', scores);
                     ws.send(JSON.stringify(scores));
-                    
+
 
 
 
