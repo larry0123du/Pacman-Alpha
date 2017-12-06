@@ -17,8 +17,12 @@
         var socket;
         var socket2;
 
+        var HOST = location.origin.replace(/^http/, 'ws');
+        var ws = new WebSocket(HOST);
+
         var intervalID;
         console.log("DATA:"+local_data);
+
 
 
         SCARED_TIMER = 30; // Set the scared time
@@ -320,7 +324,10 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect();
+            ws.onmessage = function(event) {
+                console.log('Received: ', event.data);
+            };
+            // socket = io();
             // socket = io('https://pacrussh.herokuapp.com:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
@@ -486,7 +493,7 @@
 					//console.log(foodCounter)
           gameTerminate = true;
           var scores = {userid: local_data, id:pacman.id, score:pacman.score};
-          socket.emit('score', scores);
+        //   socket.emit('score', scores);
           drawScore();
           window.location.href = '/profile';
 			}
@@ -774,8 +781,18 @@
                     // Game is over
                     console.log("Game Over");
                     gameTerminate = true;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/endGame", true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.send(JSON.stringify({
+                            score: pacman.score
+                        }));
+                        
                     var scores = {userid: local_data, id:pacman.id, score:pacman.score};
-                    socket.emit('score', scores);
+                    // socket.emit('score', scores);
+
+
+
                     drawScore();
                     window.location.href = '/profile';
                 }

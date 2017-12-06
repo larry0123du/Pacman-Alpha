@@ -1,21 +1,20 @@
+const path = require('path');
 var express = require('express');
-var router = express.Router();
+var http = require('http');
+var router = express();
+// var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
-// var io = require('socket.io').listen(server);
-
-
-// io.set('transports', ['xhr-polling']);
-// io.set("polling duration", 10); 
-
+// var server = require('http').Server(router);
+var server = http.createServer(router);
+const SocketServer = require('ws').Server;
+// router.use('/', express.static(__dirname));
 
 var score;
 var Id;
 var spid;
 
-var port = 3000; //process.env.PORT || 8080;
-
+var port = process.env.PORT || 8000;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -27,6 +26,21 @@ router.get('/', function(req, res, next) {
   console.log("Done!");
 //  res.redirect('newplayer');
 });
+
+server.listen(port, function(){
+	console.log('listening on: ' + port);
+});
+
+const wss = new SocketServer({ server: server });
+wss.on('connection', (ws) => {
+	console.log('Client connected');
+	// wss.clients.forEach((client) => {
+	// 	client.send('hello');
+	// });
+	ws.send('hello');
+	ws.on('close', () => console.log('connection disconnected'));
+});
+
 
 router.post('/', function (req, res, next) {
   // confirm that user typed same password twice
@@ -118,6 +132,29 @@ router.post('/singlePlayer', function(req, res, next){
 
 });
 
+router.post('/endGame', function(req, res, next){
+	console.log("POST SinglePlayer");
+	User.findById(req.session.userId)
+	.exec(function(error, user){
+		if(error)
+			console.log("Can\'t find user!");
+
+		console.log("Email:"+user.email+"\nusername:"+user.username);
+		user.password = user.passwordConf;
+		user.gamesPlayed = user.gamesPlayed + 1;
+		if(req.body.score > user.highScore)
+			user.highScore = req.body.score;
+
+		user.save().then(function (err){
+			if(err){
+				console.log('Mongoose Error maybe');
+			}
+
+			res.redirect('/profile');
+		});
+	});
+});
+
 // GET route after registering
 router.get('/profile', function (req, res, next) {
   User.findById(req.session.userId)
@@ -174,13 +211,71 @@ router.get('/profile', function (req, res, next) {
     });
 });
 
+router.post('/findUser', function(req,res, next){
+	console.log("IN SEARCH POST REQUEST");
+	// console.log("REQUEST:"+req.body);
+	console.log("REQUEST:"+req.body.user);
+	User.findOne({username: "admin6"}, function(err, user) {
+		if (error) {
+        return next(error);
+      } else {
+        if (user === null) {
+          var err = new Error('Not authorized! Go back!');
+          err.status = 400;
+          return next(err);
+        } else {
+
+        	var status;
+        	if(user.gamesPlayed <= 5)
+        		status = "Newbie";
+        	else if(user.gamesPlayed <= 20)
+        		status = "Rookie";
+        	else if(user.gamesPlayed <= 50)
+        		status = "Amateur";
+        	else if(user.gamesPlayed <= 100)
+        		status = "Veteran";
+        	else
+        		status = "Master";
+
+
+
+        	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
+        		var topScore = "empty";
+//        		console.log(""+posts[0].highScore+" "+posts[1].highScore+" "+posts[2].highScore+" ");	
+        		if(user.highScore == posts[0].highScore)
+        			topScore = "images/gold.svg";
+        		else if(user.highScore == posts[1].highScore)
+        			topScore = "images/silver.png";
+        		else if(user.highScore == posts[2].highScore)
+        			topScore = "images/bronze.png";
+        		else
+        			topScore = "images/nomedal.svg";
+        		console.log("\n"+topScore);
+
+	        	res.render('userprofile2', {
+        		"user":user,
+        		"medal":topScore,
+        		"status":status
+        	});
+        	});
+
+
+
+
+          //return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+        }
+      
+      }
+	});
+ });
+
 
 // GET for logout logout
 router.get('/logout', function (req, res, next) {
   if (req.session) {
     // delete session object
     req.session.destroy(function (err) {
-      if (err) {
+      if (err) { 
         return next(err);
       } else {
         return res.redirect('/');
@@ -326,6 +421,8 @@ router.post('/addstudent', function(req, res){
 	});
 });
 
+// const io = socketIO(server);
+
 // io.on('connection', function(client){
 // 	console.log('Client connected...');
 // 	client.on('score', function(data){
@@ -334,10 +431,6 @@ router.post('/addstudent', function(req, res){
 // 		client.emit('redirect', '/profile');
 // 	});
 // });
-
-server.listen(port, function(){
-	console.log('listening on: ' + port);
-});
 
 
 
