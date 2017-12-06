@@ -1,6 +1,7 @@
 var gs; // size of one grid
 var rad; // radius of pacman
 var border; // borders of the pacman world
+var gameState;
 
 var HOST = location.origin.replace(/^http/, 'ws');
 var ws = new WebSocket(HOST);
@@ -11,6 +12,9 @@ ws.onopen = function(event) {
         id: local_data
     };
     ws.send(JSON.stringify(msg));
+    ws.onmessage = function(event) {
+      gameState = event.data
+    }
 }
 /*
  * Draw the board
@@ -21,7 +25,7 @@ ws.onopen = function(event) {
    canv.height = window.innerHeight;
    ctx=canv.getContext("2d");
    document.addEventListener("keydown",keyPush);
-   drawBoard();
+   drawBoard(gameState);
 
  }
 
