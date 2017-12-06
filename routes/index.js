@@ -14,7 +14,7 @@ var score;
 var Id;
 var spid;
 
-var port = process.env.PORT || 8080;
+var port = 80; //process.env.PORT || 8080;
 
 
 /* GET home page. */
