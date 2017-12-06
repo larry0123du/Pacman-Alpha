@@ -51,18 +51,15 @@ wss.on('connection', (ws) => {
     console.log("VALUE:"+score.userid);
     console.log("ID:"+msg.userid);
 
-    User.find({}).exec(function(err,user){
-      console.log("First user:"+user);
-    })
+
 
     User.findById(score.userid)
     .exec(function(error, user){
       console.log("GOT USER:"+user);
 
-      console.log("Email:"+user.email+ "\nusername:"+user.username+"\nPW:"+user.password+"\nPWConf:"+user.passwordConf+"\nGP:"+user.gamesPlayed);
       user.password = user.passwordConf;
       user.gamesPlayed = user.gamesPlayed + 1;
-      score = 69;
+      score = 70;
       if(score > user.highScore)
       { 
         user.highScore = score;
