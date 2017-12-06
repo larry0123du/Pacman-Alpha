@@ -1,21 +1,41 @@
+<link rel="stylesheet" , href="/stylesheets/navbar.css" />
+
 <nav class="navbar navbar-inverse ">
-<div class="container">
-<div class="navbar-header"><button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> 
+<div class="container" id="container">
+	<div id="navbar" class="collapse navbar-collapse" style="
+    height: 80px;
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+">
+
+<div class="navbar-header" width="100%"><button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> 
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button> 
         <a class="navbar-brand" href="#">
-        	<img src="images/pacIcon.png" width="300" height="30" alt=""	>
+        	<img src="images/pacIcon.png" width="300%" height="30" alt=""	>
         </a>
     </div>
-<div id="navbar" class="collapse navbar-collapse">
+
+
+</div>
 <ul class="nav navbar-nav">
 <li class="active"><a href="/singleplayer">Single Player</a></li>
 <li><a href="/multiplayer">Multi Player</a></li>
-<li><a href="/leaderboard">Leaderboard</a></li>
+<li><a href="/getleaderboard">Leaderboard</a></li>
 <li><a href="/logout">Logout</a></li>
+
 </ul>
+		<form class="navbar-form" role="search" align="right">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+               <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+
+        </form>
+
 </div>
-<!--/.nav-collapse --></div>
+
+	<!--/.nav-collapse --></div>
 </nav>
+
