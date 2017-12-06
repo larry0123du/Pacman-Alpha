@@ -8,6 +8,8 @@ var mongodb = require('mongodb');
 var User = require('../models/user');
 var websock = require('../bin/www');
 
+console.log("SOCKET:" + websock);
+
 websock.on('connection', (ws) => {
   console.log("Client connected");
   // ws.send("hello");
