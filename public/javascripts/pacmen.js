@@ -7,7 +7,8 @@ var ws = new WebSocket(HOST);
 
 ws.onopen = function(event) {
     var msg = {
-        type: 'multi player'
+        type: 'multi player',
+        id: local_data
     };
     ws.send(JSON.stringify(msg));
 }

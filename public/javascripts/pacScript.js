@@ -22,7 +22,8 @@
 
         ws.onopen = function(event) {
             var msg = {
-                type: 'single player'
+                type: 'single player',
+                id: local_data
             };
             ws.send(JSON.stringify(msg));
         }
