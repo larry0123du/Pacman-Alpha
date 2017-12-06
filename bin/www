@@ -14,24 +14,24 @@ var http = require('http');
 //var port = normalizePort(process.env.PORT || '3000');
 
 // The following 2 lines commented out
-// var port = process.env.PORT || 3000;
-// app.set('port', port);
+var port = process.env.PORT || 3000;
+app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
 // The line below commented out
-// var server = http.createServer(app);
+var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 // The 3 lines below commented out
-// server.listen(port);
-// server.on('error', onError);
-// server.on('listening', onListening);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
