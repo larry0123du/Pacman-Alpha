@@ -54,8 +54,7 @@ wss.on('connection', (ws) => {
 
     User.findById(msg.userid)
     .exec(function(error, user){
-      if(error || user == null)
-        console.log('Can\'t find user!!');
+      console.log("GOT USER:"+user);
 
       console.log("Email:"+user.email+ "\nusername:"+user.username+"\nPW:"+user.password+"\nPWConf:"+user.passwordConf+"\nGP:"+user.gamesPlayed);
       user.password = user.passwordConf;
