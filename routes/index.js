@@ -6,15 +6,19 @@ var router = express();
 var mongodb = require('mongodb');
 var User = require('../models/user');
 // var server = require('http').Server(router);
-var server = http.createServer(router);
-const SocketServer = require('ws').Server;
+
+// 2 lines commented out
+// var server = http.createServer(router);
+// const SocketServer = require('ws').Server;
+
 // router.use('/', express.static(__dirname));
 
 var score;
 var Id;
 var spid;
 
-var port = process.env.PORT || 8000;
+// commented out
+// var port = process.env.PORT || 8000;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -27,19 +31,21 @@ router.get('/', function(req, res, next) {
 //  res.redirect('newplayer');
 });
 
-server.listen(port, function(){
-	console.log('listening on: ' + port);
-});
+// 3 lines commeneted out
+// server.listen(port, function(){
+// 	console.log('listening on: ' + port);
+// });
 
-const wss = new SocketServer({ server: server });
-wss.on('connection', (ws) => {
-	console.log('Client connected');
-	// wss.clients.forEach((client) => {
-	// 	client.send('hello');
-	// });
-	ws.send('hello');
-	ws.on('close', () => console.log('connection disconnected'));
-});
+// webSocket commented out
+// const wss = new SocketServer({ server: server });
+// wss.on('connection', (ws) => {
+// 	console.log('Client connected');
+// 	// wss.clients.forEach((client) => {
+// 	// 	client.send('hello');
+// 	// });
+// 	ws.send('hello');
+// 	ws.on('close', () => console.log('connection disconnected'));
+// });
 
 
 router.post('/', function (req, res, next) {
@@ -215,7 +221,7 @@ router.post('/findUser', function(req,res, next){
 	console.log("IN SEARCH POST REQUEST");
 	// console.log("REQUEST:"+req.body);
 	console.log("REQUEST:"+req.body.user);
-	User.findOne({username: "admin6"}, function(err, user) {
+	User.find({username: "admin6"}).exec(function(error, user) {
 		if (error) {
         return next(error);
       } else {

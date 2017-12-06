@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('sampsite:server');
 var http = require('http');
+
+// define SocketServer
+const SocketServer = require('ws').Server;
 /**
  * Get port from environment and store in Express.
  */
@@ -14,15 +17,15 @@ var http = require('http');
 //var port = normalizePort(process.env.PORT || '3000');
 
 // The following 2 lines commented out
-var port = process.env.PORT || 3000;
-app.set('port', port);
+ var port = process.env.PORT || 3000;
+ app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
 // The line below commented out
-var server = http.createServer(app);
+ var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -30,8 +33,23 @@ var server = http.createServer(app);
 
 // The 3 lines below commented out
 server.listen(port);
+
 server.on('error', onError);
 server.on('listening', onListening);
+
+// Use WebSocket here
+const wss = new SocketServer({ server });
+wss.on('connection', (ws) => {
+  console.log("Client connected");
+  // ws.send("hello");
+  ws.on('message', (msg) => {
+    score = JSON.parse(msg);
+    ws.send('got the score');
+  });
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
 
 /**
  * Normalize a port into a number, string, or false.
