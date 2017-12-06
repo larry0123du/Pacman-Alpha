@@ -5,7 +5,7 @@ var router = express();
 // var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
+// var server = require('http').Server(router);
 // var server = http.createServer(router);
 // var io = require('socket.io').listen(server);
 const socketIO = require('socket.io');
@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
 //  res.redirect('newplayer');
 });
 
-server.listen(port, function(){
+router.listen(port, function(){
 	console.log('listening on: ' + port);
 });
 
