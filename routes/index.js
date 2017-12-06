@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongodb = require('mongodb');
 var User = require('../models/user');
-var server = require('http').Server(router);
+var server = require('https').Server(router);
 var io = require('socket.io')(server);
 var score;
 var Id;
@@ -327,8 +327,8 @@ io.on('connection', function(client){
 	});
 });
 
-server.listen(3001, function(){
-	console.log('listening on: ' + 3001);
+server.listen(3000, function(){
+	console.log('listening on: ' + 3000);
 });
 
 
