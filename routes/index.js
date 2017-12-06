@@ -316,35 +316,21 @@ router.get('/logout', function (req, res, next) {
   }
 });
 
-
-router.get('/getleaderboard', function(req, res, next) {
-	var MongoClient = mongodb.MongoClient;
-
-	var url = 'mongodb://eharian:123@ds129966.mlab.com:29966/pacrush';
-
-	MongoClient.connect(url, function(err, db){
+router.get('/getleaderboard', function(req, res, next){
+	User.find({}).sort({'highScore': -1}).limit(3).exec(function(err, posts){
 		if(err){
-			console.log('Unable to connect to the server', err);
-		}else{
-			console.log("Connection Established");
-			var collection = db.collection('players');
-			collection.find({}).sort({score:-1}).limit(10).toArray(function(err, result){
-				if(err){
-					res.send(err);
-				}
-				else if(result.length){
-					res.render('leaderboard', {
-						"leaderboard":result
-					});
-				}
-				else
-				{
-					res.send('No documents found');
-				}
-				db.close();
+			res.send(err);
+			console.log("Failed to get LEADERBOARD");
+		}
+		else if(posts.length){
+			res.render('leaderboard', {
+				"leaderboard":posts
 			});
 		}
-
+		else
+		{
+			res.send('No documents found');
+		}
 	});
 });
 
