@@ -31,14 +31,15 @@ ws.onopen = function(event) {
 function drawBoard(gameState) {
     gs = Math.min((canv.width/38), (canv.height/30));
     rad = 0.5*gs;
-
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,canv.width,canv.height);
     border = {
         left:(canv.width-34*gs)/2,
         right:(canv.width+34*gs)/2,
         top:(canv.height-21*gs)/2,
         bottom:(canv.height+21*gs)/2
     };
-
+    console.log(gameState);
     for (var i = 0; i < gameState.length; i++) {
       for (var j = 0; i < gameState[i].length; i++) {
           let pos = getAbsPos({x:i,y:j});
