@@ -77,8 +77,8 @@ wss.on('connection', (ws) => {
       }
 
 
-      Clients.add(pacId);
-      Pacmen.add(pacId.pacId);
+      Clients.push(pacId);
+      Pacmen.push(pacId.pacId);
       
 
       ws.send(gamestate);
