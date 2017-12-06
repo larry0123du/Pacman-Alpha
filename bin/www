@@ -49,7 +49,7 @@ wss.on('connection', (ws) => {
     console.log("SCORE:"+msg);
 
     User.find({}).limit(1).exec(function(err,user){
-      console.log("First user:"+user.email);
+      console.log("First user:"+user);
     })
 
     User.findById(msg.userid)
