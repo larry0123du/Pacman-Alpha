@@ -14,6 +14,7 @@ ws.onopen = function(event) {
     ws.send(JSON.stringify(msg));
     ws.onmessage = function(event) {
       gameState = event.data
+      drawBoard(gameState);
     }
 }
 /*
@@ -25,8 +26,6 @@ ws.onopen = function(event) {
    canv.height = window.innerHeight;
    ctx=canv.getContext("2d");
    document.addEventListener("keydown",keyPush);
-   drawBoard(gameState);
-
  }
 
 function drawBoard(gameState) {
