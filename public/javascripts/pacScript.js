@@ -19,7 +19,7 @@
         console.log("DATA:"+local_data);
 
 
-        SCARED_TIMER = 60; // Set the scared time
+        SCARED_TIMER = 30; // Set the scared time
         // define directions
         var dirs = {
             SOUTH: {x:1, y:0},
@@ -277,7 +277,7 @@
         class Pacman extends Character {
             constructor(id, pos, speed) {
                 super(id, "yellow", pos, speed);
-                this.lives = 1;
+                this.lives = 3;
                 this.score = 0;
             }
 
@@ -286,12 +286,20 @@
                 if (isFood(this.pos)) {
                     foodCounter--;
                     this.score += 100;
+<<<<<<< HEAD
                     //console.log(this.score);
                 }
 				if (isSuperFood(this.pos)) {
           foodCounter--;
 					//this.score += 100;
 					console.log(this.score);
+=======
+                    // console.log(this.score);
+                }
+				if (isSuperFood(this.pos)) {
+					this.score += 100;
+					// console.log(this.score);
+>>>>>>> cf9e75d4d3f8b871e3a96cdc5c4921ed4a2d5bd1
 					agents.forEach(agent => {
 						if (agent instanceof Ghost) {
 							agent.scare();
@@ -318,7 +326,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect('http://localhost:3001');
+            socket = io();
             //socket = io('http://localhost:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
@@ -634,7 +642,7 @@
 
         function drawGhost(ghost) {
             pos = ghost.getPos();
-            console.log(pos);
+            // console.log(pos);
 			if (gameState[pos.x][pos.y] === 'F') {
                 // Ghost does not eat the food
                 gameState[pos.x][pos.y] = 'G';
@@ -785,8 +793,8 @@
         }
 
         function print_pos(agent) {
-            console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
-             + ": x - " + agent.pos.x + " y - " + agent.pos.y);
+            // console.log(((agent instanceof Pacman)?"Pacman ":"Ghost ") + agent.id
+            //  + ": x - " + agent.pos.x + " y - " + agent.pos.y);
         }
 
         function printBoard() {
@@ -831,6 +839,6 @@
 			}
 		}
 
-        socket.on('ID', function(Id){
-            console.log("ID:"+Id);
-        });
+        // socket.on('ID', function(Id){
+        //     console.log("ID:"+Id);
+        // });
