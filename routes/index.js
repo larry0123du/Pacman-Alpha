@@ -215,7 +215,7 @@ router.post('/findUser', function(req,res, next){
 	console.log("IN SEARCH POST REQUEST");
 	// console.log("REQUEST:"+req.body);
 	console.log("REQUEST:"+req.body.user);
-	User.findOne({username: "admin6"}, function(err, user) {
+	User.find({username: "admin6"}).exec(function(error, user) {
 		if (error) {
         return next(error);
       } else {
