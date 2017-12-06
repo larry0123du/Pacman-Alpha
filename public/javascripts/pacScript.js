@@ -315,7 +315,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io.connect('http://localhost:3001');
+            socket = io();
             //socket = io('http://localhost:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
