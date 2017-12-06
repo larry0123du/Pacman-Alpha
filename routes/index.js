@@ -8,6 +8,8 @@ var score;
 var Id;
 var spid;
 
+var port = process.env.PORT || 8080;
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -327,8 +329,8 @@ io.on('connection', function(client){
 	});
 });
 
-server.listen(3001, function(){
-	console.log('listening on: ' + 3001);
+server.listen(port, function(){
+	console.log('listening on: ' + port);
 });
 
 
