@@ -320,7 +320,7 @@
          * Init function that initialize the basic configs of the pacman world
          */
         function init() {
-            socket = io();
+            socket = io.connect();
             // socket = io('https://pacrussh.herokuapp.com:3001');
             //socket.connect('http://localhost:3001');
 			gs = Math.min((canv.width/38), (canv.height/30));
