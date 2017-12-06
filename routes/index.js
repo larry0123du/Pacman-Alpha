@@ -7,7 +7,7 @@ var mongodb = require('mongodb');
 var User = require('../models/user');
 var server = require('http').Server(router);
 // var server = http.createServer(router);
-
+const SocketServer = require('ws').Server;
 // router.use('/', express.static(__dirname));
 
 var score;
@@ -29,6 +29,15 @@ router.get('/', function(req, res, next) {
 
 server.listen(port, function(){
 	console.log('listening on: ' + port);
+});
+
+const wss = new SocketServer({ server });
+wss.on('connection', (ws) => {
+	console.log('Client connected');
+	wss.clients.forEach((client) => {
+		client.send('hello');
+	});
+	wss.on('close', () => console.log('connection disconnected'));
 });
 
 
