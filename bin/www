@@ -10,7 +10,7 @@ var http = require('http');
 var User = require('../models/user');
 var Multipac = require('../public/javascripts/multiPac.js');
 
-var gameState = Array(20).fill().map(
+var gamestate = Array(20).fill().map(
     () => Array(33).fill('N'));
 
 // var User = 
