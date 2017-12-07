@@ -84,10 +84,14 @@ wss.on('connection', (ws) => {
         "pacId": new Multipac.Pacman(data.id, "yellow", pos)
       }
 
+
+
       gamestate[pos.x][pos.y] = "P";
 
       Clients.push(pacId);
       Pacmen.push(pacId.pacId);
+
+      console.log(Clients[0].pacId.pos);
 
       // console.log(gamestate);
 
