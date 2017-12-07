@@ -189,6 +189,24 @@ wss.on('connection', (ws) => {
   });
   ws.on('close', () => {
     console.log('Client disconnected');
+    // console.log('clientLength:'+clientList.length);
+    // console.log(ws.server);
+
+
+    for(var i=0; i< clientList.length; i+=1)
+    {
+      // console.log(clientList[i]);
+      if(clientList[i] == ws)
+      {
+        console.log("Removing idx:"+i);
+        console.log("It's POS: ("+Clients[i].pacId.pos.x+","+Clients[i].pacId.pos.y+")");
+        gamestate[Clients[i].pacId.pos.x][Clients[i].pacId.pos.y] = "N";
+        Clients.splice(i,1);
+        Pacmen.splice(i,1);
+        clientList.splice(i, 1);
+        break;
+      }
+    }
   });
 });
 
