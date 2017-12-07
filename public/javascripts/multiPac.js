@@ -40,7 +40,7 @@ exports.Pacman = class {
 
 exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     if (!p.alive) {return;} // This should not happen, but just in case
-    console.log("GS:"+gameState);
+    // console.log("GS:"+gameState);
     p.dir = a;
     p.move();
     pacmen.forEach(pac => {
@@ -49,8 +49,8 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
             return;
         }
     });
-    console.log(p.id);
-    console.log("updPac:"+JSON.stringify(p.pos));
+    // console.log(p.id);
+    // console.log("updPac:"+JSON.stringify(p.pos));
     pos = p.getPos();
     console.log("position: " + pos.x + " " + pos.y);
     gameState[pos.x][pos.y] = 'P';

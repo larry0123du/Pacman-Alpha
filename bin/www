@@ -171,7 +171,7 @@ wss.on('connection', (ws) => {
 //action: (string) west|south|north|east
 //id
 function moveUser(data){
-  console.log("IN moveUser, Looking for:"+data.id);
+  // console.log("IN moveUser, Looking for:"+data.id);
   
   for(var i= Clients.length -1; i>=0; i-=1)
   {
@@ -192,9 +192,9 @@ function moveUser(data){
        }
 
 
-      console.log("IN Move:"+gamestate);
-      console.log("PacID:"+Clients[i].pacId.id);
-      console.log(Clients[i].pacId.pos);
+      // console.log("IN Move:"+gamestate);
+      // console.log("PacID:"+Clients[i].pacId.id);
+      // console.log(Clients[i].pacId.pos);
       Multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)
     }
   }
