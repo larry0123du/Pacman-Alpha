@@ -63,8 +63,9 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
             return;
         }
         pacPos = pac.getPos();
-        if (pacPos.x == last.x && pacPos.y == last.y) {continue;}
-        gameState[last.x][last.y] = 'N';
+        if (pacPos.x != last.x || pacPos.y != last.y) {
+            gameState[last.x][last.y] = 'N';            
+        }
     });
     // console.log(p.id);
     // console.log("updPac:"+JSON.stringify(p.pos));
