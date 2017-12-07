@@ -254,8 +254,8 @@ router.post('/findUser', function(req,res, next){
           return next(err);
         } else {
 
-        	console.log("Games Played:"+user.gamesPlayed);
-        	console.log("High Score:"+user.highScore);
+        	console.log("Games Played:"+user[0].gamesPlayed);
+        	console.log("High Score:"+user[0].highScore);
 
         	if(user.gamesPlayed <= 5)
         		status = "Newbie";
