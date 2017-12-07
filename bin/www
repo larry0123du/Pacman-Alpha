@@ -187,7 +187,7 @@ function moveUser(data){
         default: action = Multipac.dirs.NONE;
        }
 
-      multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)
+      Multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)
     }
   }
 }
