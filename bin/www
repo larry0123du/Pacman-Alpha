@@ -194,6 +194,7 @@ function moveUser(data){
 
       console.log("IN Move:"+gamestate);
       console.log("PacID:"+Clients[i].pacId.id);
+      console.log(Clients[i].pacId.id);
       Multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)
     }
   }
