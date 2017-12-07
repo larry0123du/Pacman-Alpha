@@ -61,10 +61,10 @@ function drawBoard(gameState) {
     {
         let pos = getAbsPos({x:i/33, y:i%33});
         console.log(pos)
-        if(gameState[i/33][i%33] == 'S'){
+        if(gameState[i] == 'S'){
             drawSuperFoodDot(pos);
         }
-        else if(gameState[i/33][i%33] =='P'){
+        else if(gameState[i] =='P'){
             drawPacman(pos);
         }
         else{
