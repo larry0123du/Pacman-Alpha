@@ -89,7 +89,7 @@ wss.on('connection', (ws) => {
       Clients.push(pacId);
       Pacmen.push(pacId.pacId);
 
-      console.log(gamestate);
+      // console.log(gamestate);
 
       var opstate = [];
       for(var i=0; i<20; ++i)

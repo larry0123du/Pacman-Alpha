@@ -48,6 +48,7 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
         }
     });
     pos = p.getPos();
+    console.log("position: " + pos.x + " " + pos.y);
     gameState[pos.x][pos.y] = 'P';
     last = p.lastPos;
     gameState[last.x][last.y] = 'N';
