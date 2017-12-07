@@ -63,7 +63,7 @@ wss.on('connection', (ws) => {
         'y': Math.floor(Math.random()*33)
       }
 
-      while(gamestate[pos.x][pos.y] == 'P')
+      while(gamestate[pos.x][pos.y] == "P")
       {
         pos = {
         'x': Math.floor(Math.random()*20),
@@ -76,8 +76,8 @@ wss.on('connection', (ws) => {
         "pacId": new Multipac.Pacman(data.id, "yellow", pos) 
       }
 
-      gamestate[pos.x][pos.y] = "N";
-      
+      gamestate[pos.x][pos.y] = "P";
+
       Clients.push(pacId);
       Pacmen.push(pacId.pacId);
       
