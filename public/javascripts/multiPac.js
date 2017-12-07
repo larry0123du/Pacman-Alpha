@@ -28,8 +28,8 @@ exports.Pacman = class {
     move() {
         this.lastPos = exports.copyPos(this.pos);
 
-        this.pos.x += this.speed * this.dir.x;
-        this.pos.y += this.speed * this.dir.y;
+        this.pos.x += this.dir.x;
+        this.pos.y += this.dir.y;
         if (!exports.isLegalMove(this.pos)) {
             this.pos = exports.copyPos(this.lastPos);
             this.dir = exports.dirs.NONE;
