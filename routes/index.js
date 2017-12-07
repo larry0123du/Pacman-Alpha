@@ -243,7 +243,7 @@ router.post('/findUser', function(req,res, next){
 	console.log("REQUEST:"+req.body.user);	
 	var status;		
 	var topScore = "empty";
-	User.find({username: req.body.user}).exec(function(error, user) {
+	User.findOne({username: req.body.user}).exec(function(error, user) {
 		console.log("FOUND:"+user);
 		if (error) {
         return next(error);
@@ -254,8 +254,8 @@ router.post('/findUser', function(req,res, next){
           return next(err);
         } else {
 
-        	console.log("Games Played:"+user[0].gamesPlayed);
-        	console.log("High Score:"+user[0].highScore);
+        	console.log("Games Played:"+user.gamesPlayed);
+        	console.log("High Score:"+user.highScore);
 
         	if(user.gamesPlayed <= 5)
         		status = "Newbie";
