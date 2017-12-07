@@ -142,11 +142,11 @@ wss.on('connection', (ws) => {
 
             for(var i=0; i<clientList.length; i+=1)
       {
-        clientList[i].send({
+        clientList[i].send(JSON.stringify({
           gamestate: opstate.join(""),
           posx: Clients[i].pacId.pos.x,
           posy: Clients[i].pacId.pos.y
-        });
+        }));
       }
       
       // clientList.forEach(client => {
@@ -170,11 +170,11 @@ wss.on('connection', (ws) => {
 
       for(var i=0; i<clientList.length; i+=1)
       {
-        clientList[i].send({
+        clientList[i].send(JSON.stringify({
           gamestate: opstate.join(""),
           posx: Clients[i].pacId.pos.x,
           posy: Clients[i].pacId.pos.y
-        });
+        }));
       }
 
       // clientList.forEach(client => {
