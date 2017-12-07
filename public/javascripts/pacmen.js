@@ -13,7 +13,7 @@ ws.onopen = function(event) {
     };
     ws.send(JSON.stringify(msg));
     ws.onmessage = function(event) {
-      gameState = event.data
+      gameState = JSON.parse(event.data)
       drawBoard(gameState);
     }
 }
@@ -54,6 +54,7 @@ function drawBoard(gameState) {
           }
       }
     }
+    ctx.strokeStyle="white";
     roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
     roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
 }
