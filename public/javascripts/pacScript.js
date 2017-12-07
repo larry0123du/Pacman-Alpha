@@ -502,7 +502,7 @@
 					console.log("GAME OVER");
 					//console.log(foodCounter)
           gameTerminate = true;
-          var scores = {userid: local_data, id:pacman.id, score:pacman.score};
+          var scores = {type:'single player', userid: local_data, id:pacman.id, score:pacman.score};
         //   socket.emit('score', scores);
         ws.send(JSON.stringify(scores));
 
@@ -808,7 +808,7 @@
                         //     score: pacman.score
                         // }));
 
-                    var scores = {userid: local_data, id:pacman.id, score:pacman.score};
+                    var scores = {type:'single player', userid: local_data, id:pacman.id, score:pacman.score};
                     // socket.emit('score', scores);
                     ws.send(JSON.stringify(scores));
 

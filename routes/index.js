@@ -283,8 +283,8 @@ router.post('/findUser', function(req,res, next){
 
 
         	}).then(function(err){
+        		console.log("Calling Render");
 	        	res.render('userprofile2', {
-        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
