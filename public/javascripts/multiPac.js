@@ -15,7 +15,7 @@ exports.Pacman = class {
     constructor(id, color, pos) {
         this.id = id;
         this.color = color;
-        this.pos = pos;
+        this.pos = exports.copyPos(pos);
         this.lastPos = null;
         this.dir = exports.dirs.NONE;
         this.alive = true;
