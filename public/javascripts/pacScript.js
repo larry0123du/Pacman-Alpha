@@ -25,6 +25,8 @@
                 type: 'single player',
                 id: local_data
             };
+            console.log("ID:"+local_data);
+            console.log(JSON.stringify(msg));
             ws.send(JSON.stringify(msg));
         }
 

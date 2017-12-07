@@ -150,7 +150,7 @@ wss.on('connection', (ws) => {
     {
 
       score = JSON.parse(msg);
-      // console.log("MSG:"+msg);
+      console.log("MSG:"+msg);
       // console.log("SCORE:"+score);
       // console.log("VALUE:"+score.userid);
       console.log("ID:"+msg.userid);
