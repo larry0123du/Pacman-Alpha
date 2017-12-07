@@ -106,7 +106,7 @@ wss.on('connection', (ws) => {
       }
       // console.log(JSON.stringify(gamestate));
       // console.log(JSON.stringify(jsState));
-      console.log(opstate.join(""));
+      // console.log(opstate.join(""));
       ws.send(opstate.join(""));
 
     }
@@ -176,15 +176,15 @@ function moveUser(data){
       var action;
       switch(data.action)
       {
-        case "WEST": action = multipac.dirs.WEST;
+        case "WEST": action = Multipac.dirs.WEST;
                       break;
-        case "SOUTH": action = multipac.dirs.SOUTH;
+        case "SOUTH": action = Multipac.dirs.SOUTH;
                     break;
-        case "NORTH": action = multipac.dirs.NORTH;
+        case "NORTH": action = Multipac.dirs.NORTH;
                     break;
-        case "EAST": action = multipac.dirs.EAST;
+        case "EAST": action = Multipac.dirs.EAST;
                     break;
-        default: action = multipac.dirs.NONE;
+        default: action = Multipac.dirs.NONE;
        }
 
       multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)
