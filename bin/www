@@ -42,12 +42,18 @@ var Pacmen = [];
  * Create HTTP server.
  */
  function superMode() {
-   setinterval(updateTimer, 20);
+   setinterval(updateTimer, 450);
  }
  function updateTimer() {
    Pacmen.forEach(pac => {
      if (pac.timer > 0) {
        pac.timer--;
+     }
+     else if (pac.timer < 0) {
+       pac.timer++;
+     }
+     else {
+       pac.isSuper = false;
      }
    });
 
@@ -72,11 +78,12 @@ var Clients = [];
 wss.on('connection', (ws) => {
   console.log("Client connected");
   // ws.send("hello");
-  clientList.push(ws);
   ws.on('message', (msg) => {
     data = JSON.parse(msg);
     if(data.type == "multi player")
-    {
+    {    
+      clientList.push(ws);
+
       console.log("MULTIPLAYER:"+msg);
       var pos = {
         x: Math.floor(Math.random()*20),

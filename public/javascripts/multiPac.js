@@ -40,6 +40,7 @@ exports.Pacman = class {
         if (exports.isSuperFood(this.pos, gameState)) {
             // foodCounter--;
             this.isSuper = true;
+            this.timer = -20;
             pacmen.forEach(pac => {
                 if (!pac.isSuper && pac.timer == 0) {
                     pac.timer = 20;
@@ -54,11 +55,16 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     // console.log("GS:"+gameState);
     p.dir = a;
     p.move(pacmen, gameState);
+
+    last = p.lastPos;
     pacmen.forEach(pac => {
         if (pac.id !== p.id && exports.check_collision(p, pac)) {
             exports.handle_collision(p,pac);
             return;
         }
+        pacPos = pac.getPos();
+        if (pacPos.x == last.x && pacPos.y == last.y) {continue;}
+        gameState[last.x][last.y] = 'N';
     });
     // console.log(p.id);
     // console.log("updPac:"+JSON.stringify(p.pos));
@@ -70,8 +76,6 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     else {
         gameState[pos.x][pos.y] = 'P';
     }
-    last = p.lastPos;
-    gameState[last.x][last.y] = 'N';
 }
 
 /*
