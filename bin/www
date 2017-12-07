@@ -178,7 +178,8 @@ wss.on('connection', (ws) => {
   });
   ws.on('close', () => {
     console.log('Client disconnected');
-
+    console.log('clientLength:'+clientList.length);
+    console.log(ws);
 
 
     for(var i=0; i< clientList.length-1; i+=1)
