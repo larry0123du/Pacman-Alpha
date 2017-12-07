@@ -58,7 +58,7 @@ function drawBoard(gameState) {
             // console.log("pos: " + pos);
             drawPacman(pos);
         }
-        elsei f(gameState[i] =='Q'){
+        else if(gameState[i] =='Q'){
           drawSuperPacman(pos);
         }
     }
