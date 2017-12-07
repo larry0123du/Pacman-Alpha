@@ -44,14 +44,15 @@ ws.onopen = function(event) {
 function drawBoard(gameState) {
     gs = Math.min((canv.width/38), (canv.height/30));
     rad = 0.5*gs;
-    // ctx.fillStyle="black";
-    // ctx.fillRect(0,0,canv.width,canv.height);
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,canv.width,canv.height);
     border = {
         left:(canv.width-34*gs)/2,
         right:(canv.width+34*gs)/2,
         top:(canv.height-21*gs)/2,
         bottom:(canv.height+21*gs)/2
     };
+<<<<<<< HEAD
     // pos = {
     //   x: 356,
     //   y: 207
@@ -60,6 +61,9 @@ function drawBoard(gameState) {
     // pos.x = 400;
     // pos.y = 300;
     // drawPacman(pos);
+=======
+
+>>>>>>> f3f93f76b02099b48a2016380a13dc64cdadbbdd
 
     // console.log("border" + border)
     // console.log("gameState " + gameState);
