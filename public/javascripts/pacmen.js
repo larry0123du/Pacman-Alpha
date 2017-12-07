@@ -53,9 +53,8 @@ function drawBoard(gameState) {
         bottom:(canv.height+21*gs)/2
     };
 
-
-    console.log("border" + border)
-    console.log("gameState " + gameState);
+    // console.log("border" + border)
+    // console.log("gameState " + gameState);
     ctx.strokeStyle="white";
     roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
     roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
@@ -68,8 +67,8 @@ function drawBoard(gameState) {
             drawSuperFoodDot(pos);
         }
         else if(gameState[i] =='P'){
-            console.log("Relative pos: " + i/33 + " " + i % 33)
-            console.log("pos: " + pos);
+            // console.log("Relative pos: " + i/33 + " " + i % 33)
+            // console.log("pos: " + pos);
             drawPacman(pos);
         }
         else{
@@ -117,7 +116,7 @@ function drawPacman(pos, mouthClose=false) {
     startingAngle = 0;
     endAngle = 2*Math.PI;
     ctx.moveTo(pos.x, pos.y);
-    console.log("Pos in drawPacman: " + pos.x + " " + pos.y);
+    // console.log("Pos in drawPacman: " + pos.x + " " + pos.y);
     ctx.arc(pos.x, pos.y, rad, startingAngle, endAngle, false);
     ctx.closePath();
     ctx.fill();
