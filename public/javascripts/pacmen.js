@@ -2,6 +2,9 @@ var gs; // size of one grid
 var rad; // radius of pacman
 var border; // borders of the pacman world
 var gameState;
+var posx;
+var posy;
+var mypos;
 
 var HOST = location.origin.replace(/^http/, 'ws');
 var ws = new WebSocket(HOST);
@@ -13,7 +16,11 @@ ws.onopen = function(event) {
     };
     ws.send(JSON.stringify(msg));
     ws.onmessage = function(event) {
-        gameState = event.data;
+        input = JSON.parse(event.data);
+        gameState = input.gamestate;
+        posx = input.posx;
+        posy = input.posy;
+        mypos = getAbsPos({x:posx, y:posy});
       drawBoard(gameState);
     }
 }
@@ -97,7 +104,11 @@ function drawSuperFoodDot(pos) {
     ctx.fill();
 }
 function drawPacman(pos, mouthClose=false) {
-    ctx.fillStyle="yellow";
+    if(mypos.x != pos.x || mypos.y != pos.y)
+        ctx.fillStyle="yellow";
+    else   
+        ctx.fillStyle="green";
+    
     ctx.beginPath();
     var startingAngle;
     var endAngle;
