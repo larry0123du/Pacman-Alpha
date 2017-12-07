@@ -41,6 +41,17 @@ var Pacmen = [];
 /**
  * Create HTTP server.
  */
+ function superMode() {
+   setinterval(updateTimer, 20);
+ }
+ function updateTimer() {
+   Pacmen.forEach(pac => {
+     if (pac.timer > 0) {
+       pac.timer--;
+     }
+   });
+
+ }
 
 // The line below commented out
  var server = http.createServer(app);
@@ -130,7 +141,7 @@ wss.on('connection', (ws) => {
           opstate.push(gamestate[i][j]);
         }
       }
-      
+
       clientList.forEach(client => {
         client.send(opstate.join(""));
       });
@@ -187,7 +198,7 @@ wss.on('connection', (ws) => {
 //id
 function moveUser(data){
   // console.log("IN moveUser, Looking for:"+data.id);
-  
+
   for(var i= Clients.length -1; i>=0; i-=1)
   {
     if(Clients[i].id == data.id)

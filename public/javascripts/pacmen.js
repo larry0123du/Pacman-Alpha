@@ -58,7 +58,8 @@ function drawBoard(gameState) {
             // console.log("pos: " + pos);
             drawPacman(pos);
         }
-        else{
+        elsei f(gameState[i] =='Q'){
+          drawSuperPacman(pos);
         }
     }
 
@@ -97,6 +98,19 @@ function drawSuperFoodDot(pos) {
 }
 function drawPacman(pos, mouthClose=false) {
     ctx.fillStyle="yellow";
+    ctx.beginPath();
+    var startingAngle;
+    var endAngle;
+    startingAngle = 0;
+    endAngle = 2*Math.PI;
+    ctx.moveTo(pos.x, pos.y);
+    // console.log("Pos in drawPacman: " + pos.x + " " + pos.y);
+    ctx.arc(pos.x, pos.y, rad, startingAngle, endAngle, false);
+    ctx.closePath();
+    ctx.fill();
+}
+function drawSuperPacman(pos, mouthClose=false) {
+    ctx.fillStyle="purple";
     ctx.beginPath();
     var startingAngle;
     var endAngle;
