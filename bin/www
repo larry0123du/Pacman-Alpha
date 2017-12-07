@@ -80,7 +80,8 @@ wss.on('connection', (ws) => {
       Clients.push(pacId);
       Pacmen.push(pacId.pacId);
       
-      // console.log(gamestate);
+      console.log(gamestate);
+      console.log(JSON.stringify(gamestate));
       ws.send(JSON.stringify(gamestate));
 
     }
