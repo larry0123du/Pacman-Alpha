@@ -17,10 +17,12 @@ exports.Pacman = class {
         this.color = color;
         this.pos = exports.copyPos(pos);
 
-        console.log('initially the pacman is at ' + this.pos.x + " " + this.pos.y);
         this.lastPos = null;
         this.dir = exports.dirs.NONE;
         this.alive = true;
+        
+        this.vulnerable = false;
+        this.timer = 0;
     }
 
     getPos() {return this.pos;}
