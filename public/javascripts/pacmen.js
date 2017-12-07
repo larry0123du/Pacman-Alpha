@@ -20,7 +20,7 @@ ws.onopen = function(event) {
         gameState = input.gamestate;
         posx = input.posx;
         posy = input.posy;
-        mypos = getAbsPos({x:posx, y:posy});
+        mypos = getAbsPos({x:Math.floor(posx), y:Math.floor(posy)});
       drawBoard(gameState);
     }
 }
