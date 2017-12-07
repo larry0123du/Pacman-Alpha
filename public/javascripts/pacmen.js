@@ -52,18 +52,6 @@ function drawBoard(gameState) {
         top:(canv.height-21*gs)/2,
         bottom:(canv.height+21*gs)/2
     };
-<<<<<<< HEAD
-    // pos = {
-    //   x: 356,
-    //   y: 207
-    // }
-    // drawPacman(pos);
-    // pos.x = 400;
-    // pos.y = 300;
-    // drawPacman(pos);
-=======
-
->>>>>>> f3f93f76b02099b48a2016380a13dc64cdadbbdd
 
     // console.log("border" + border)
     // console.log("gameState " + gameState);
