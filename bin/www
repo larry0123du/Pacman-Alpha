@@ -146,7 +146,7 @@ wss.on('connection', (ws) => {
         client.send(opstate.join(""));
       });
     }
-    else
+    else if(data.type == "single player")
     {
 
       score = JSON.parse(msg);
