@@ -218,10 +218,10 @@ router.get('/profile', function (req, res, next) {
         			topScore = "images/bronze.png";
         		else
         			topScore = "images/nomedal.svg";
+        		
         		console.log("\n"+topScore);
 
 	        	res.render('userprofile2', {
-        		"temp":5,
         		"user":user,
         		"medal":topScore,
         		"status":status
