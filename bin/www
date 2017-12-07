@@ -12,8 +12,16 @@ var Multipac = require('../public/javascripts/multiPac.js');
 
 var gamestate = Array(20).fill().map(
     () => Array(33).fill('N'));
+gameState[4][7] = 'S';
+gameState[4][14] = 'S';
+gameState[4][21] = 'S';
+gameState[4][28] = 'S';
+gameState[14][7] = 'S';
+gameState[14][14] = 'S';
+gameState[14][21] = 'S';
+gameState[14][28] = 'S';
 
-// var User = 
+// var User =
 
 // define SocketServer
 const SocketServer = require('ws').Server;
@@ -73,14 +81,14 @@ wss.on('connection', (ws) => {
 
       var pacId = {
         "id": data.id,
-        "pacId": new Multipac.Pacman(data.id, "yellow", pos) 
+        "pacId": new Multipac.Pacman(data.id, "yellow", pos)
       }
 
       gamestate[pos.x][pos.y] = "P";
 
       Clients.push(pacId);
       Pacmen.push(pacId.pacId);
-      
+
       console.log(gamestate);
 
       var opstate = [];
@@ -127,7 +135,7 @@ wss.on('connection', (ws) => {
           user.gamesPlayed = user.gamesPlayed + 1;
           // score = 70;
           if(score.score > user.highScore)
-          { 
+          {
             user.highScore = score.score;
           }
           else
@@ -176,7 +184,7 @@ function moveUser(data){
                     break;
         case "EAST": action = multipac.dirs.EAST;
                     break;
-        default: action = multipac.dirs.NONE; 
+        default: action = multipac.dirs.NONE;
        }
 
       multipac.updatePacman(Clients[i].pacId, action, Pacmen, gamestate)

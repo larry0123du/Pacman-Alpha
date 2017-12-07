@@ -52,7 +52,7 @@
             document.addEventListener("keydown",keyPush);
             init();
             // keep running the game
-            intervalID = setInterval(game,600);
+            intervalID = setInterval(game,450);
 		}
 
         function copyPos(pos) {
@@ -494,8 +494,8 @@
 			ctx.fillRect(0,canv.height-50, canv.width, 50);
 			ctx.font = "15px Lucida Console";
 			ctx.fillStyle = "white";
-			ctx.fillText("Score: " + agents[0].score, canv.width/2, (canv.height-40));
-			ctx.fillText("Lives: " + agents[0].lives, canv.width/2, (canv.height-25));
+			ctx.fillText("Score: " + agents[0].score, canv.width/2, (canv.height-35));
+			ctx.fillText("Lives: " + agents[0].lives, canv.width/2, (canv.height-20));
       if (foodCounter == 0) {
 					console.log("GAME OVER");
 					//console.log(foodCounter)
