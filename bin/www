@@ -12,14 +12,14 @@ var Multipac = require('../public/javascripts/multiPac.js');
 
 var gamestate = Array(20).fill().map(
     () => Array(33).fill('N'));
-gameState[4][7] = 'S';
-gameState[4][14] = 'S';
-gameState[4][21] = 'S';
-gameState[4][28] = 'S';
-gameState[14][7] = 'S';
-gameState[14][14] = 'S';
-gameState[14][21] = 'S';
-gameState[14][28] = 'S';
+gamestate[4][7] = 'S';
+gamestate[4][14] = 'S';
+gamestate[4][21] = 'S';
+gamestate[4][28] = 'S';
+gamestate[14][7] = 'S';
+gamestate[14][14] = 'S';
+gamestate[14][21] = 'S';
+gamestate[14][28] = 'S';
 
 // var User =
 
