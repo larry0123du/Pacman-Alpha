@@ -146,7 +146,7 @@ wss.on('connection', (ws) => {
     }
 
 
-    ws.send('got a message');
+    // ws.send('got a message');
   });
   ws.on('close', () => {
     console.log('Client disconnected');
