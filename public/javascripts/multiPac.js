@@ -38,6 +38,7 @@ exports.Pacman = class {
 
 exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     if (!p.alive) {return;} // This should not happen, but just in case
+    console.log("GS:"+gameState);
     p.dir = a;
     p.move();
     pacmen.forEach(pac => {
