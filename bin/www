@@ -83,13 +83,23 @@ wss.on('connection', (ws) => {
       
       console.log(gamestate);
 
+      var opstate = [];
+      for(var i=0; i<20; ++i)
+      {
+        for(var j=0; j<33; ++j)
+        {
+          opstate.push(gamestate[i][j]);
+        }
+      }
+
       jsState = Array(20);
       for (var i = 0;i < 20; i ++) {
         jsState[i] = JSON.stringify(gamestate[i]);
       }
-      console.log(JSON.stringify(gamestate));
-      console.log(JSON.stringify(jsState));
-      ws.send(JSON.stringify(jsState));
+      // console.log(JSON.stringify(gamestate));
+      // console.log(JSON.stringify(jsState));
+      console.log(opstate.join(""));
+      ws.send(opstate.join(""));
 
     }
     else if(data.type == "move")

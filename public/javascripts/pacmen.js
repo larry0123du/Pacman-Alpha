@@ -13,19 +13,20 @@ ws.onopen = function(event) {
     };
     ws.send(JSON.stringify(msg));
     ws.onmessage = function(event) {
-      s = JSON.parse(event.data);
-      // preserve newlines, etc - use valid JSON
-        s = s.replace(/\\n/g, "\\n")  
-                       .replace(/\\'/g, "\\'")
-                       .replace(/\\"/g, '\\"')
-                       .replace(/\\&/g, "\\&")
-                       .replace(/\\r/g, "\\r")
-                       .replace(/\\t/g, "\\t")
-                       .replace(/\\b/g, "\\b")
-                       .replace(/\\f/g, "\\f");
-// remove non-printable and other non-valid JSON chars
-        s = s.replace(/[\u0000-\u0019]+/g,""); 
-        var gameState = JSON.parse(s);
+        gameState = event.data;
+//       s = JSON.parse(event.data);
+//       // preserve newlines, etc - use valid JSON
+//         s = s.replace(/\\n/g, "\\n")  
+//                        .replace(/\\'/g, "\\'")
+//                        .replace(/\\"/g, '\\"')
+//                        .replace(/\\&/g, "\\&")
+//                        .replace(/\\r/g, "\\r")
+//                        .replace(/\\t/g, "\\t")
+//                        .replace(/\\b/g, "\\b")
+//                        .replace(/\\f/g, "\\f");
+// // remove non-printable and other non-valid JSON chars
+//         s = s.replace(/[\u0000-\u0019]+/g,""); 
+//         var gameState = JSON.parse(s);
       drawBoard(gameState);
     }
 }
@@ -56,21 +57,35 @@ function drawBoard(gameState) {
     roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
     roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
 
-    for (var i = 0; i < gameState.length; i++) {
-      for (var j = 0; i < gameState[i].length; i++) {
-          let pos = getAbsPos({x:i,y:j});
-          console.log(pos)
-          if (gameState[i][j] == 'S') {
+    for(var i=0; i<gameState.length; ++i)
+    {
+        let pos = getAbsPos({x:i/33, y:i%33});
+        console.log(pos)
+        if(gameState[i/33][i%33] == 'S'){
             drawSuperFoodDot(pos);
-          }
-          else if (gameState[i][j] == 'P') {
+        }
+        else if(gameState[i/33][i%33] =='P'){
             drawPacman(pos);
-          }
-          else {
-            gameState[i][j] = 'N';
-          }
-      }
+        }
+        else{
+        }
     }
+
+    // for (var i = 0; i < gameState.length; i++) {
+    //   for (var j = 0; i < gameState[i].length; i++) {
+    //       let pos = getAbsPos({x:i,y:j});
+    //       console.log(pos)
+    //       if (gameState[i][j] == 'S') {
+    //         drawSuperFoodDot(pos);
+    //       }
+    //       else if (gameState[i][j] == 'P') {
+    //         drawPacman(pos);
+    //       }
+    //       else {
+    //         gameState[i][j] = 'N';
+    //       }
+    //   }
+    // }
 }
 
 function getAbsPos(pos) {
