@@ -179,10 +179,15 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     console.log('Client disconnected');
 
+
+
     for(var i=0; i< clientList.length-1; i+=1)
     {
       if(clientList[i] == ws)
       {
+        gamestate[Clients[i].pacId.pos.x][Clients[i].pacId.pos.y] = "N";
+        Clients.splie(i,1);
+        Pacmen.splice(i,1);
         clientList.splice(i, 1);
         break;
       }
