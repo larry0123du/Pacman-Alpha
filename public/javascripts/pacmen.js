@@ -158,4 +158,6 @@ switch(evt.keyCode) {
         msg["action"] = "SOUTH"
     break;
   }
+
+  ws.send(JSON.stringify(msg));
 }
