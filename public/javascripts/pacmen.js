@@ -52,6 +52,7 @@ function drawBoard(gameState) {
         top:(canv.height-21*gs)/2,
         bottom:(canv.height+21*gs)/2
     };
+    console.log(border)
     //console.log(gameState);
     ctx.strokeStyle="white";
     roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
