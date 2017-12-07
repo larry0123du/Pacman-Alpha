@@ -118,7 +118,7 @@ wss.on('connection', (ws) => {
     {
       console.log("IN MOVE:"+msg);
       moveUser(data);
-      ws.send(gameState);
+      ws.send(gamestate);
     }
     else
     {
