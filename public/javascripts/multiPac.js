@@ -37,7 +37,7 @@ exports.Pacman = class {
             this.dir = exports.dirs.NONE;
             return;
         }
-        if (isSuperFood(this.pos)) {
+        if (exports.isSuperFood(this.pos)) {
             // foodCounter--;
             this.isSuper = true;
             pacmen.forEach(pac => {
