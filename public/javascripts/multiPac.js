@@ -57,16 +57,20 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     p.move(pacmen, gameState);
 
     last = p.lastPos;
+    var safeToMark = true;
+
     pacmen.forEach(pac => {
         if (pac.id !== p.id && exports.check_collision(p, pac)) {
             exports.handle_collision(p,pac);
             return;
         }
         pacPos = pac.getPos();
-        if (pacPos.x != last.x || pacPos.y != last.y) {
-            gameState[last.x][last.y] = 'N';            
+        if (pacPos.x == last.x && pacPos.y == last.y) {
+            safeToMark = false;            
         }
     });
+    if (safeToMark)
+        gameState[last.x][last.y] = 'N';
     // console.log(p.id);
     // console.log("updPac:"+JSON.stringify(p.pos));
     pos = p.getPos();

@@ -41,9 +41,6 @@ var Pacmen = [];
 /**
  * Create HTTP server.
  */
- function superMode() {
-   setinterval(updateTimer, 450);
- }
  function updateTimer() {
    Pacmen.forEach(pac => {
      if (pac.timer > 0) {
@@ -71,6 +68,9 @@ server.listen(port);
 
 server.on('error', onError);
 server.on('listening', onListening);
+
+
+setinterval(updateTimer, 450);
 
 // Use WebSocket here
 const wss = new SocketServer({ server });
