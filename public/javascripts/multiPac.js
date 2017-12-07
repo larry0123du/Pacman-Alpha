@@ -27,7 +27,7 @@ exports.Pacman = class {
 
     getPos() {return this.pos;}
 
-    move(pacmen) {
+    move(pacmen, gameState) {
         this.lastPos = exports.copyPos(this.pos);
 
         this.pos.x += this.dir.x;
@@ -37,7 +37,7 @@ exports.Pacman = class {
             this.dir = exports.dirs.NONE;
             return;
         }
-        if (exports.isSuperFood(this.pos)) {
+        if (exports.isSuperFood(this.pos, gameState)) {
             // foodCounter--;
             this.isSuper = true;
             pacmen.forEach(pac => {
@@ -53,7 +53,7 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     if (!p.alive) {return;} // This should not happen, but just in case
     // console.log("GS:"+gameState);
     p.dir = a;
-    p.move(pacmen);
+    p.move(pacmen, gameState);
     pacmen.forEach(pac => {
         if (pac.id !== p.id && exports.check_collision(p, pac)) {
             exports.handle_collision(p,pac);
