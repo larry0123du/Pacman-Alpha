@@ -61,6 +61,7 @@ var Clients = [];
 wss.on('connection', (ws) => {
   console.log("Client connected");
   // ws.send("hello");
+  clientList.push(ws);
   ws.on('message', (msg) => {
     data = JSON.parse(msg);
     if(data.type == "multi player")
@@ -111,7 +112,10 @@ wss.on('connection', (ws) => {
       // console.log(JSON.stringify(gamestate));
       // console.log(JSON.stringify(jsState));
       // console.log(opstate.join(""));
-      ws.send(opstate.join(""));
+      clientList.forEach(client => {
+        client.send(opstate.join(""));
+      });
+      // ws.send(opstate.join(""));
 
     }
     else if(data.type == "move")
@@ -126,7 +130,10 @@ wss.on('connection', (ws) => {
           opstate.push(gamestate[i][j]);
         }
       }
-      ws.send(opstate.join(""));
+      
+      clientList.forEach(client => {
+        client.send(opstate.join(""));
+      });
     }
     else
     {
