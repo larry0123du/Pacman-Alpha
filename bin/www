@@ -41,9 +41,6 @@ var Pacmen = [];
 /**
  * Create HTTP server.
  */
- function superMode() {
-   setinterval(updateTimer, 450);
- }
  function updateTimer() {
    Pacmen.forEach(pac => {
      if (pac.timer > 0) {
@@ -54,6 +51,15 @@ var Pacmen = [];
      }
      else {
        pac.isSuper = false;
+            
+      gamestate[4][7] = 'S';
+      gamestate[4][14] = 'S';
+      gamestate[4][21] = 'S';
+      gamestate[4][28] = 'S';
+      gamestate[14][7] = 'S';
+      gamestate[14][14] = 'S';
+      gamestate[14][21] = 'S';
+      gamestate[14][28] = 'S';
      }
    });
 
@@ -72,6 +78,9 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+
+setInterval(updateTimer, 450);
+
 // Use WebSocket here
 const wss = new SocketServer({ server });
 var Clients = [];
@@ -81,7 +90,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     data = JSON.parse(msg);
     if(data.type == "multi player")
-    {    
+    {
       clientList.push(ws);
 
       console.log("MULTIPLAYER:"+msg);
