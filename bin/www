@@ -79,7 +79,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 
-setinterval(updateTimer, 450);
+setInterval(updateTimer, 450);
 
 // Use WebSocket here
 const wss = new SocketServer({ server });
@@ -90,7 +90,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     data = JSON.parse(msg);
     if(data.type == "multi player")
-    {    
+    {
       clientList.push(ws);
 
       console.log("MULTIPLAYER:"+msg);
