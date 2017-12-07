@@ -56,7 +56,11 @@ function drawBoard(gameState) {
       x: 356,
       y: 207
     }
-    drawPacman(pos)
+    drawPacman(pos);
+    pos.x = 400;
+    pos.y = 300;
+    drawPacman(pos);
+
     console.log("border" + border)
     //console.log(gameState);
     ctx.strokeStyle="white";
