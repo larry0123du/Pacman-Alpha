@@ -82,8 +82,14 @@ wss.on('connection', (ws) => {
       Pacmen.push(pacId.pacId);
       
       console.log(gamestate);
+
+      jsState = Array(20);
+      for (var i = 0;i < 20; i ++) {
+        jsState[i] = JSON.stringify(gamestate[i]);
+      }
       console.log(JSON.stringify(gamestate));
-      ws.send(JSON.stringify(gamestate));
+      console.log(JSON.stringify(jsState));
+      ws.send(JSON.stringify(jsState));
 
     }
     else if(data.type == "move")
