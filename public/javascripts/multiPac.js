@@ -69,11 +69,7 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
             safeToMark = false;            
         }
     });
-    if (safeToMark)
-        gameState[last.x][last.y] = 'N'
-    else
-        gameState[last.x][last.y] = 'P'
-
+    
     // console.log(p.id);
     // console.log("updPac:"+JSON.stringify(p.pos));
     pos = p.getPos();
@@ -83,6 +79,11 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     }
     else {
         gameState[pos.x][pos.y] = 'P';
+        if (safeToMark)
+            gameState[last.x][last.y] = 'N'
+        else
+            gameState[last.x][last.y] = 'P'
+
     }
 }
 
