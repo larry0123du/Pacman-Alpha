@@ -130,9 +130,19 @@ wss.on('connection', (ws) => {
       // console.log(JSON.stringify(gamestate));
       // console.log(JSON.stringify(jsState));
       // console.log(opstate.join(""));
-      clientList.forEach(client => {
-        client.send(opstate.join(""));
-      });
+
+            for(var i=0; i<clientList.length; i+=1)
+      {
+        clientList[i].send({
+          gamestate: opstate.join(""),
+          posx: Clients[i].pacId.pos.x,
+          posy: Clients[i].pacId.pos.y
+        });
+      }
+      
+      // clientList.forEach(client => {
+      //   client.send(opstate.join(""));
+      // });
       // ws.send(opstate.join(""));
 
     }
@@ -149,9 +159,18 @@ wss.on('connection', (ws) => {
         }
       }
 
-      clientList.forEach(client => {
-        client.send(opstate.join(""));
-      });
+      for(var i=0; i<clientList.length; i+=1)
+      {
+        clientList[i].send({
+          gamestate: opstate.join(""),
+          posx: Clients[i].pacId.pos.x,
+          posy: Clients[i].pacId.pos.y
+        });
+      }
+
+      // clientList.forEach(client => {
+      //   client.send(opstate.join(""));
+      // });
     }
     else if(data.type == "single player")
     {
