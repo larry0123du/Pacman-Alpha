@@ -40,14 +40,18 @@ function drawBoard(gameState) {
         bottom:(canv.height+21*gs)/2
     };
     //console.log(gameState);
+    ctx.strokeStyle="white";
+    roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
+    roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
+
     for (var i = 0; i < gameState.length; i++) {
       for (var j = 0; i < gameState[i].length; i++) {
           let pos = getAbsPos({x:i,y:j});
           console.log(pos)
-          if (isSuperFood(pos)) {
+          if (gameState[i][j] == 'S') {
             drawSuperFoodDot(pos);
           }
-          else if (isPacMan(pos)) {
+          else if (gameState[i][j] == 'P') {
             drawPacman(pos);
           }
           else {
@@ -55,9 +59,6 @@ function drawBoard(gameState) {
           }
       }
     }
-    ctx.strokeStyle="white";
-    roundedRect(border.left - gs/2, border.top - gs/2, border.right - border.left + gs, border.bottom - border.top + gs, gs);
-    roundedRect(border.left, border.top, border.right - border.left, border.bottom - border.top, gs);
 }
 
 function getAbsPos(pos) {
@@ -105,14 +106,6 @@ function roundedRect(x, y, width, height, radius) {
 
     ctx.closePath();
     ctx.stroke();
-}
-
-function isSuperFood(pos) {
-  return gameState[pos.x][pos.y] == 'S';
-}
-
-function isPacMan(pos) {
-  return gameState[pos.x][pos.y] == 'P';
 }
 
 function keyPush(evt) {
