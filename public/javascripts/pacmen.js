@@ -13,7 +13,7 @@ ws.onopen = function(event) {
     };
     ws.send(JSON.stringify(msg));
     ws.onmessage = function(event) {
-      gameState = JSON.parse(event.data)
+      gameState = JSON.parse(event.data);
       drawBoard(gameState);
     }
 }
@@ -39,10 +39,11 @@ function drawBoard(gameState) {
         top:(canv.height-21*gs)/2,
         bottom:(canv.height+21*gs)/2
     };
-    console.log(gameState);
+    //console.log(gameState);
     for (var i = 0; i < gameState.length; i++) {
       for (var j = 0; i < gameState[i].length; i++) {
           let pos = getAbsPos({x:i,y:j});
+          console.log(pos)
           if (isSuperFood(pos)) {
             drawSuperFoodDot(pos);
           }
@@ -90,6 +91,7 @@ function drawPacman(pos, mouthClose=false) {
 }
 
 function roundedRect(x, y, width, height, radius) {
+    ctx.strokeStyle="white";
     ctx.beginPath();
     ctx.moveTo(x, y + radius);
     ctx.lineTo(x, y + height - radius);
