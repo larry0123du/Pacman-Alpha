@@ -51,6 +51,15 @@ var Pacmen = [];
      }
      else {
        pac.isSuper = false;
+            
+      gamestate[4][7] = 'S';
+      gamestate[4][14] = 'S';
+      gamestate[4][21] = 'S';
+      gamestate[4][28] = 'S';
+      gamestate[14][7] = 'S';
+      gamestate[14][14] = 'S';
+      gamestate[14][21] = 'S';
+      gamestate[14][28] = 'S';
      }
    });
 
