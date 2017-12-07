@@ -21,13 +21,13 @@ exports.Pacman = class {
         this.dir = exports.dirs.NONE;
         this.alive = true;
         
-        this.vulnerable = false;
+        this.isSuper = false;
         this.timer = 0;
     }
 
     getPos() {return this.pos;}
 
-    move() {
+    move(pacmen) {
         this.lastPos = exports.copyPos(this.pos);
 
         this.pos.x += this.dir.x;
@@ -37,6 +37,15 @@ exports.Pacman = class {
             this.dir = exports.dirs.NONE;
             return;
         }
+        if (isSuperFood(this.pos)) {
+            // foodCounter--;
+            this.isSuper = true;
+            pacmen.forEach(pac => {
+                if (!pac.isSuper && pac.timer == 0) {
+                    pac.timer = 20;
+                }
+            });
+        }
     }
 }
 
@@ -44,7 +53,7 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     if (!p.alive) {return;} // This should not happen, but just in case
     // console.log("GS:"+gameState);
     p.dir = a;
-    p.move();
+    p.move(pacmen);
     pacmen.forEach(pac => {
         if (pac.id !== p.id && exports.check_collision(p, pac)) {
             exports.handle_collision(p,pac);
@@ -55,7 +64,12 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
     // console.log("updPac:"+JSON.stringify(p.pos));
     pos = p.getPos();
     console.log("position: " + pos.x + " " + pos.y);
-    gameState[pos.x][pos.y] = 'P';
+    if (p.isSuper) {
+        gameState[pos.x][pos.y] = 'Q';
+    }
+    else {
+        gameState[pos.x][pos.y] = 'P';
+    }
     last = p.lastPos;
     gameState[last.x][last.y] = 'N';
 }
@@ -84,9 +98,17 @@ exports.isLegalMove = function isLegalMove(pos) {
 }
 
 exports.handle_collision = function handle_collision(p1, p2) {
-    // For now, both pacmen die
-    p1.alive = false;
-    p2.alive = false;
+    // If one pacman is super and the other isn't, the other one dies
+    if (p1.isSuper && !p2.isSuper) {
+        p2.alive = false;
+    }
+    else if (p2.isSuper && !p1.isSuper) {
+        p1.alive = false;
+    }
+    else if (p2.isSuper && p1.isSuper) {
+        p1.isSuper = false;
+        p2.isSuper = false;
+    }
 }
 
 exports.check_collision = function check_collision(p1, p2) {
@@ -98,6 +120,12 @@ exports.check_collision = function check_collision(p1, p2) {
 }
 
 exports.checkCollision = function checkCollision(ppos, gpos, plast, glast) {
+    if (plast == null || glast == null) {
+        if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
+            return true;
+        }
+        return false;
+    }
     if (Math.abs(ppos.x - gpos.x) < 1 && Math.abs(ppos.y - gpos.y) < 1) {
         return true;
     }
