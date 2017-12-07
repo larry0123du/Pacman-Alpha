@@ -47,6 +47,7 @@ exports.updatePacman = function updatePacman(p, a, pacmen, gameState) {
             return;
         }
     });
+    console.log("updPac:"+p.pos);
     pos = p.getPos();
     console.log("position: " + pos.x + " " + pos.y);
     gameState[pos.x][pos.y] = 'P';
