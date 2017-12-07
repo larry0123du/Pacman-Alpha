@@ -16,7 +16,7 @@ ws.onopen = function(event) {
         gameState = event.data;
 //       s = JSON.parse(event.data);
 //       // preserve newlines, etc - use valid JSON
-//         s = s.replace(/\\n/g, "\\n")  
+//         s = s.replace(/\\n/g, "\\n")
 //                        .replace(/\\'/g, "\\'")
 //                        .replace(/\\"/g, '\\"')
 //                        .replace(/\\&/g, "\\&")
@@ -25,7 +25,7 @@ ws.onopen = function(event) {
 //                        .replace(/\\b/g, "\\b")
 //                        .replace(/\\f/g, "\\f");
 // // remove non-printable and other non-valid JSON chars
-//         s = s.replace(/[\u0000-\u0019]+/g,""); 
+//         s = s.replace(/[\u0000-\u0019]+/g,"");
 //         var gameState = JSON.parse(s);
       drawBoard(gameState);
     }
@@ -112,9 +112,8 @@ function drawPacman(pos, mouthClose=false) {
     var endAngle;
     startingAngle = 0;
     endAngle = 2*Math.PI;
-    real_pos = getAbsPos(pos);
-    ctx.moveTo(real_pos.x, real_pos.y);
-    ctx.arc(real_pos.x, real_pos.y, rad, startingAngle, endAngle, false);
+    ctx.moveTo(pos.x, pos.y);
+    ctx.arc(pos.x, pos.y, rad, startingAngle, endAngle, false);
     ctx.closePath();
     ctx.fill();
 }
