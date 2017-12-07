@@ -44,8 +44,8 @@ ws.onopen = function(event) {
 function drawBoard(gameState) {
     gs = Math.min((canv.width/38), (canv.height/30));
     rad = 0.5*gs;
-    ctx.fillStyle="black";
-    ctx.fillRect(0,0,canv.width,canv.height);
+    // ctx.fillStyle="black";
+    // ctx.fillRect(0,0,canv.width,canv.height);
     border = {
         left:(canv.width-34*gs)/2,
         right:(canv.width+34*gs)/2,
