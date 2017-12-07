@@ -65,7 +65,7 @@ function drawBoard(gameState) {
 
     for(var i=0; i<gameState.length; ++i)
     {
-        let pos = getAbsPos({x:i/33, y:i%33});
+        let pos = getAbsPos({x:Math.floor(i/33), y:i%33});
         // console.log(pos)
         if(gameState[i] == 'S'){
             drawSuperFoodDot(pos);
