@@ -118,7 +118,15 @@ wss.on('connection', (ws) => {
     {
       console.log("IN MOVE:"+msg);
       moveUser(data);
-      ws.send(gamestate);
+      var opstate = [];
+      for(var i=0; i<20; ++i)
+      {
+        for(var j=0; j<33; ++j)
+        {
+          opstate.push(gamestate[i][j]);
+        }
+      }
+      ws.send(opstate.join(""));
     }
     else
     {
